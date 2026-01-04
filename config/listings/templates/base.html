@@ -1,0 +1,941 @@
+{% load i18n %}
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ps' %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1, viewport-fit=cover" />
+  <title>{% block title %}SCHOLARIFY - Opportunities for All{% endblock %}</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            },
+            secondary: {
+              50: '#fdf4ff',
+              100: '#fae8ff',
+              200: '#f5d0fe',
+              300: '#f0abfc',
+              400: '#e879f9',
+              500: '#d946ef',
+              600: '#c026d3',
+              700: '#a21caf',
+              800: '#86198f',
+              900: '#701a75',
+            }
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'gradient': 'gradient 8s ease infinite',
+            'fade-in': 'fadeIn 0.5s ease-in-out',
+            'slide-up': 'slideUp 0.4s ease-out',
+            'slide-in': 'slideIn 0.3s ease-out',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            gradient: {
+              '0%, 100%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' },
+            },
+            slideIn: {
+              '0%': { transform: 'translateX(100%)' },
+              '100%': { transform: 'translateX(0)' },
+            }
+          },
+          backgroundImage: {
+            'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    [dir="rtl"] body { direction: rtl; }
+    .container-max { max-width: 120rem; }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, #0ea5e9, #8b5cf6);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(to bottom, #0284c7, #7c3aed);
+    }
+    
+    /* Selection color */
+    ::selection {
+      background-color: rgba(14, 165, 233, 0.2);
+      color: #0c4a6e;
+    }
+    
+    /* Smooth transitions */
+    .transition-all {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Glass morphism effect */
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .glass-dark {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 50%, #d946ef 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      background-size: 200% 100%;
+      animation: gradient 3s ease infinite;
+    }
+    
+    /* Card hover effects */
+    .hover-card {
+      transition: all 0.3s ease;
+    }
+    .hover-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Mobile menu fixes */
+    @media (max-width: 768px) {
+      body.menu-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+      }
+    }
+
+    /* Mobile menu animations */
+    .mobile-menu-enter {
+      transform: translateX(100%);
+    }
+    .mobile-menu-enter-active {
+      transform: translateX(0);
+      transition: transform 300ms ease-out;
+    }
+    .mobile-menu-exit {
+      transform: translateX(0);
+    }
+    .mobile-menu-exit-active {
+      transform: translateX(100%);
+      transition: transform 300ms ease-in;
+    }
+
+    /* Better touch targets */
+    .touch-target {
+      min-height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-white to-primary-50 text-slate-900 min-h-screen flex flex-col">
+
+<!-- ================= HEADER ================= -->
+<header class="sticky top-0 z-50 border-b border-slate-200/50 glass shadow-sm">
+  <div class="container-max mx-auto px-4 lg:px-8">
+
+    <!-- Top Row -->
+    <div class="h-20 flex items-center justify-between gap-4">
+
+      <!-- Brand Logo with Animation -->
+      <a href="/" class="flex items-center gap-3 min-w-0 group">
+        <div class="relative">
+          <div class="absolute -inset-2 bg-gradient-to-r from-primary-400 to-secondary-500 rounded-2xl blur opacity-30 group-hover:opacity-70 transition-opacity duration-300"></div>
+          <span class="relative inline-flex h-12 w-12 items-center justify-center rounded-xl
+                     bg-gradient-to-br from-primary-600 via-secondary-600 to-purple-600
+                     text-white font-extrabold shadow-lg group-hover:shadow-xl transition-all duration-300">
+            <i class="fas fa-graduation-cap text-lg"></i>
+          </span>
+        </div>
+
+        <div class="min-w-0 leading-tight">
+          <div class="font-black text-lg sm:text-xl tracking-tight truncate">
+            <span class="gradient-text font-black text-xl tracking-[0.22em] uppercase">SCHOLARIFY</span>
+          </div>
+
+          <div class="text-xs sm:text-sm tracking-[0.15em] uppercase text-slate-500 truncate">
+            {% trans "Opportunities • Growth • Success" %}
+          </div>
+        </div>
+      </a>
+
+      <!-- Right side (desktop nav + actions) -->
+      <nav class="flex items-center gap-2 sm:gap-4">
+
+        <!-- Desktop Links -->
+        <div class="hidden lg:flex items-center gap-1 bg-white/50 rounded-2xl p-1.5 border border-slate-200/50">
+          <a href="/" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary-700 hover:bg-white transition-all duration-200 flex items-center gap-2">
+            <i class="fas fa-home text-xs"></i>
+            {% trans "Home" %}
+          </a>
+          <a href="{% url 'listings_list' %}" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary-700 hover:bg-white transition-all duration-200 flex items-center gap-2">
+            <i class="fas fa-search text-xs"></i>
+            {% trans "Browse" %}
+          </a>
+          <!-- ADDED: Our Services Tab -->
+          <a href="{% url 'pages:services' %}" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary-700 hover:bg-white transition-all duration-200 flex items-center gap-2">
+            <i class="fas fa-handshake text-xs"></i>
+            {% trans "Services" %}
+          </a>
+          <!-- ADDED: About Us Tab -->
+          <a href="{% url 'pages:about' %}" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary-700 hover:bg-white transition-all duration-200 flex items-center gap-2">
+            <i class="fas fa-info-circle text-xs"></i>
+            {% trans "About" %}
+          </a>
+          <a href="{% url 'pages:gallery' %}" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary-700 hover:bg-white transition-all duration-200 flex items-center gap-2">
+            <i class="fas fa-images text-xs"></i>
+            {% trans "Gallery" %}
+          </a>
+          <a href="{% url 'pages:contact' %}" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary-700 hover:bg-white transition-all duration-200 flex items-center gap-2">
+            <i class="fas fa-envelope text-xs"></i>
+            {% trans "Contact" %}
+          </a>
+
+          {% if request.user.is_staff %}
+            <div class="h-6 w-px bg-slate-300 mx-1"></div>
+            <a href="{% url 'pages:dashboard' %}" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary-700 hover:bg-white transition-all duration-200 flex items-center gap-2">
+              <i class="fas fa-chart-line text-xs"></i>
+              {% trans "Dashboard" %}
+            </a>
+            <a href="/admin/" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary-700 hover:bg-white transition-all duration-200 flex items-center gap-2">
+              <i class="fas fa-cog text-xs"></i>
+              {% trans "Admin" %}
+            </a>
+          {% endif %}
+        </div>
+
+        <!-- Desktop Auth -->
+        <div class="hidden lg:flex items-center gap-3">
+          {% if request.user.is_authenticated %}
+            <div class="flex items-center gap-3">
+              <div class="text-sm text-slate-600 whitespace-nowrap">
+                <span class="font-semibold gradient-text">{{ request.user.username }}</span>
+              </div>
+              <div class="h-8 w-px bg-slate-300"></div>
+              <form method="post" action="{% url 'accounts:logout' %}">
+                {% csrf_token %}
+                <button type="submit"
+                  class="px-5 py-2.5 inline-flex items-center rounded-xl border border-slate-200 bg-gradient-to-r from-white to-slate-50
+                         text-sm font-semibold text-slate-800 hover:from-primary-50 hover:to-primary-100 hover:border-primary-300 
+                         hover:shadow-md active:scale-[0.98] transition-all duration-200 flex items-center gap-2">
+                  <i class="fas fa-sign-out-alt text-xs"></i>
+                  {% trans "Logout" %}
+                </button>
+              </form>
+            </div>
+          {% else %}
+            <a href="{% url 'accounts:login' %}"
+               class="px-5 py-2.5 inline-flex items-center rounded-xl text-sm font-semibold text-slate-700 
+                      hover:text-primary-700 hover:bg-white border border-transparent hover:border-slate-200 transition-all duration-200">
+              {% trans "Login" %}
+            </a>
+            <a href="{% url 'accounts:signup' %}"
+               class="px-5 py-2.5 inline-flex items-center rounded-xl bg-gradient-to-r from-primary-600 to-secondary-600 text-white
+                      text-sm font-semibold hover:from-primary-700 hover:to-secondary-700 hover:shadow-lg 
+                      active:scale-[0.98] transition-all duration-200 shadow-md">
+              <i class="fas fa-user-plus mr-2"></i>
+              {% trans "Sign up" %}
+            </a>
+          {% endif %}
+        </div>
+
+        <!-- Language (desktop) -->
+        <div class="hidden lg:block relative group">
+          <select id="langSelect"
+                  class="h-10 border border-slate-200 rounded-xl px-4 pl-10 text-sm bg-white hover:bg-slate-50 
+                         focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none cursor-pointer">
+            <option value="en">English</option>
+            <option value="ps">پښتو</option>
+          </select>
+          <i class="fas fa-globe absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 pointer-events-none"></i>
+          <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 pointer-events-none"></i>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuBtn"
+                class="lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-xl 
+                       bg-gradient-to-r from-white to-slate-50 border border-slate-200 
+                       hover:from-primary-50 hover:to-primary-100 hover:border-primary-300 
+                       hover:shadow-md transition-all duration-200 group touch-target"
+                type="button"
+                aria-label="Open menu"
+                aria-expanded="false"
+                aria-controls="mobileMenuPanel">
+          <svg class="h-5 w-5 text-slate-800 group-hover:text-primary-700 transition-colors" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Info Banner -->
+    <div class="pb-2 -mt-1">
+      <div class="bg-gradient-to-r from-primary-50 to-secondary-50 border border-primary-100 rounded-xl p-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="bg-primary-100 p-2 rounded-lg">
+            <i class="fas fa-headset text-primary-600"></i>
+          </div>
+          <div class="text-sm">
+            <span class="font-semibold text-slate-800">{% trans "Academic consulting:" %}</span>
+            <a href="tel:+93744241813" class="font-bold text-primary-700 hover:text-primary-800 hover:underline ml-1">
+              +93 744 241 813
+            </a>
+          </div>
+        </div>
+        <div class="hidden sm:block text-xs text-slate-600">
+          <i class="fas fa-clock mr-1"></i>
+          {% trans "Mon-Fri: 9AM-5PM" %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FIXED: Mobile Menu Panel - WIDER and BETTER -->
+  <div id="mobileMenuPanel" class="lg:hidden hidden fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-out translate-x-full overflow-y-auto">
+    <div class="h-full flex flex-col">
+      <!-- Panel Header -->
+      <div class="p-6 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-primary-600 to-secondary-600 flex items-center justify-center">
+            <i class="fas fa-graduation-cap text-white"></i>
+          </div>
+          <div>
+            <div class="font-black text-xl gradient-text">SCHOLARIFY</div>
+            <div class="text-xs text-slate-500">{% trans "Opportunities for All" %}</div>
+          </div>
+        </div>
+        <button id="closeMobileMenu" class="h-10 w-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center touch-target">
+          <i class="fas fa-times text-slate-700 text-lg"></i>
+        </button>
+      </div>
+      
+      <!-- Panel Content -->
+      <div class="flex-1 p-6 space-y-6">
+        <!-- User Info Section (if logged in) -->
+        {% if request.user.is_authenticated %}
+        <div class="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-2xl p-4 mb-4">
+          <div class="flex items-center gap-3">
+            <div class="h-12 w-12 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center text-white font-bold text-lg">
+              {{ request.user.username|first|upper }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="font-bold text-slate-900 text-lg truncate">{{ request.user.username }}</div>
+              <div class="text-sm text-slate-600 truncate">{{ request.user.email|default:"No email" }}</div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Main Navigation -->
+        <div>
+          <div class="text-xs uppercase font-bold text-slate-500 mb-3 px-2">{% trans "MAIN NAVIGATION" %}</div>
+          <div class="space-y-2">
+            <a href="/"
+               class="flex items-center gap-4 px-4 py-4 rounded-xl text-base font-semibold text-slate-800 hover:bg-primary-50 hover:text-primary-700 transition-all duration-200 group">
+              <div class="h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+                <i class="fas fa-home text-primary-600"></i>
+              </div>
+              <span>{% trans "Home" %}</span>
+            </a>
+
+            <a href="{% url 'listings_list' %}"
+               class="flex items-center gap-4 px-4 py-4 rounded-xl text-base font-semibold text-slate-800 hover:bg-primary-50 hover:text-primary-700 transition-all duration-200 group">
+              <div class="h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+                <i class="fas fa-search text-primary-600"></i>
+              </div>
+              <span>{% trans "Browse Opportunities" %}</span>
+            </a>
+
+            <a href="{% url 'pages:services' %}"
+               class="flex items-center gap-4 px-4 py-4 rounded-xl text-base font-semibold text-slate-800 hover:bg-primary-50 hover:text-primary-700 transition-all duration-200 group">
+              <div class="h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+                <i class="fas fa-handshake text-primary-600"></i>
+              </div>
+              <span>{% trans "Our Services" %}</span>
+            </a>
+
+            <a href="{% url 'pages:about' %}"
+               class="flex items-center gap-4 px-4 py-4 rounded-xl text-base font-semibold text-slate-800 hover:bg-primary-50 hover:text-primary-700 transition-all duration-200 group">
+              <div class="h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+                <i class="fas fa-info-circle text-primary-600"></i>
+              </div>
+              <span>{% trans "About Us" %}</span>
+            </a>
+
+            <a href="{% url 'pages:gallery' %}"
+               class="flex items-center gap-4 px-4 py-4 rounded-xl text-base font-semibold text-slate-800 hover:bg-primary-50 hover:text-primary-700 transition-all duration-200 group">
+              <div class="h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+                <i class="fas fa-images text-primary-600"></i>
+              </div>
+              <span>{% trans "Gallery" %}</span>
+            </a>
+
+            <a href="{% url 'pages:contact' %}"
+               class="flex items-center gap-4 px-4 py-4 rounded-xl text-base font-semibold text-slate-800 hover:bg-primary-50 hover:text-primary-700 transition-all duration-200 group">
+              <div class="h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+                <i class="fas fa-envelope text-primary-600"></i>
+              </div>
+              <span>{% trans "Contact Us" %}</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Admin Section (if staff) -->
+        {% if request.user.is_staff %}
+        <div>
+          <div class="text-xs uppercase font-bold text-slate-500 mb-3 px-2">{% trans "ADMIN PANEL" %}</div>
+          <div class="space-y-2">
+            <a href="{% url 'pages:dashboard' %}"
+               class="flex items-center gap-4 px-4 py-4 rounded-xl text-base font-semibold text-slate-800 hover:bg-purple-50 hover:text-purple-700 transition-all duration-200 group">
+              <div class="h-10 w-10 rounded-lg bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                <i class="fas fa-chart-line text-purple-600"></i>
+              </div>
+              <span>{% trans "Dashboard" %}</span>
+            </a>
+
+            <a href="/admin/"
+               class="flex items-center gap-4 px-4 py-4 rounded-xl text-base font-semibold text-slate-800 hover:bg-purple-50 hover:text-purple-700 transition-all duration-200 group">
+              <div class="h-10 w-10 rounded-lg bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                <i class="fas fa-cog text-purple-600"></i>
+              </div>
+              <span>{% trans "Admin Panel" %}</span>
+            </a>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Authentication Section -->
+        <div>
+          <div class="text-xs uppercase font-bold text-slate-500 mb-3 px-2">{% trans "ACCOUNT" %}</div>
+          <div class="space-y-3">
+            {% if request.user.is_authenticated %}
+              <form method="post" action="{% url 'accounts:logout' %}">
+                {% csrf_token %}
+                <button type="submit"
+                        class="w-full py-3.5 rounded-xl bg-gradient-to-r from-white to-slate-50 border border-slate-200 
+                               text-base font-semibold text-slate-800 hover:from-primary-50 hover:to-primary-100 
+                               hover:border-primary-300 transition-all flex items-center justify-center gap-3 touch-target">
+                  <i class="fas fa-sign-out-alt text-primary-600"></i>
+                  {% trans "Logout" %}
+                </button>
+              </form>
+            {% else %}
+              <a href="{% url 'accounts:login' %}"
+                 class="block w-full py-3.5 rounded-xl border border-slate-200 text-center text-base font-semibold 
+                        text-slate-800 hover:bg-primary-50 hover:border-primary-300 transition-all flex items-center justify-center gap-3">
+                <i class="fas fa-sign-in-alt text-primary-600"></i>
+                {% trans "Login to Account" %}
+              </a>
+              <a href="{% url 'accounts:signup' %}"
+                 class="block w-full py-3.5 rounded-xl bg-gradient-to-r from-primary-600 to-secondary-600 
+                        text-white text-base font-semibold hover:from-primary-700 hover:to-secondary-700 
+                        hover:shadow-lg transition-all shadow-md text-center flex items-center justify-center gap-3">
+                <i class="fas fa-user-plus"></i>
+                {% trans "Create Free Account" %}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Language Selector -->
+        <div>
+          <div class="text-xs uppercase font-bold text-slate-500 mb-3 px-2">{% trans "LANGUAGE" %}</div>
+          <div class="grid grid-cols-2 gap-3">
+            <button data-lang="en" class="lang-btn py-3.5 rounded-xl border-2 border-primary-200 bg-primary-50 text-primary-800 font-semibold hover:border-primary-400 hover:bg-primary-100 transition-all flex items-center justify-center gap-2 touch-target">
+              <i class="fas fa-language"></i>
+              English
+            </button>
+            <button data-lang="ps" class="lang-btn py-3.5 rounded-xl border-2 border-slate-200 bg-white text-slate-800 font-semibold hover:border-primary-400 hover:bg-primary-50 transition-all flex items-center justify-center gap-2 touch-target">
+              <i class="fas fa-language"></i>
+              پښتو
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="bg-gradient-to-r from-primary-900 to-secondary-900 rounded-2xl p-5 text-white mt-6">
+          <div class="text-center mb-4">
+            <div class="text-3xl font-bold mb-1">5,000+</div>
+            <div class="text-sm text-primary-200">{% trans "Trusted Students & Professionals" %}</div>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <div class="text-center">
+              <div class="text-lg font-bold">500+</div>
+              <div class="text-xs text-primary-300">{% trans "Opportunities" %}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-lg font-bold">100+</div>
+              <div class="text-xs text-primary-300">{% trans "Countries" %}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-lg font-bold">24/7</div>
+              <div class="text-xs text-primary-300">{% trans "Support" %}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Footer -->
+      <div class="p-6 border-t border-slate-200 bg-slate-50 sticky bottom-0">
+        <div class="text-center">
+          <div class="font-semibold text-slate-800 mb-2">{% trans "Need help? We're here for you!" %}</div>
+          <a href="tel:+93744241813" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-bold py-3 px-6 rounded-xl hover:from-primary-700 hover:to-secondary-700 transition-all duration-200 shadow-md w-full touch-target">
+            <i class="fas fa-phone"></i>
+            <div class="text-left">
+              <div class="text-lg">+93 744 241 813</div>
+              <div class="text-xs font-normal opacity-90">{% trans "Academic Consulting" %}</div>
+            </div>
+          </a>
+          <div class="text-xs text-slate-600 mt-3">
+            <i class="fas fa-clock mr-1"></i>
+            {% trans "Mon-Fri: 9AM-5PM | Sat: 10AM-2PM" %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile Menu Overlay -->
+  <div id="mobileMenuOverlay" class="lg:hidden hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"></div>
+</header>
+
+<!-- ================= FLASH MESSAGES ================= -->
+{% if messages %}
+  <div class="container-max mx-auto px-4 lg:px-8 pt-6">
+    {% for message in messages %}
+      <div class="mb-4 rounded-2xl border px-5 py-4 text-sm animate-slide-up shadow-lg
+        {% if message.tags == 'success' %} border-emerald-200 bg-gradient-to-r from-emerald-50 to-white text-emerald-800
+        {% elif message.tags == 'warning' %} border-amber-200 bg-gradient-to-r from-amber-50 to-white text-amber-800
+        {% elif message.tags == 'error' %} border-rose-200 bg-gradient-to-r from-rose-50 to-white text-rose-800
+        {% else %} border-primary-200 bg-gradient-to-r from-primary-50 to-white text-slate-700 {% endif %}">
+        <div class="flex items-center gap-3">
+          <i class="fas 
+            {% if message.tags == 'success' %} fa-check-circle text-emerald-500
+            {% elif message.tags == 'warning' %} fa-exclamation-triangle text-amber-500
+            {% elif message.tags == 'error' %} fa-times-circle text-rose-500
+            {% else %} fa-info-circle text-primary-500 {% endif %} 
+            text-lg"></i>
+          <div class="flex-1">{{ message }}</div>
+          <button class="ml-2 text-slate-500 hover:text-slate-700 touch-target" onclick="this.parentElement.parentElement.remove()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- ================= MAIN CONTENT ================= -->
+<main class="flex-1 container-max mx-auto px-4 lg:px-8 pt-8 pb-16">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-gradient-to-b from-slate-900 to-slate-950 text-white border-t border-slate-800">
+  <div class="container-max mx-auto px-4 lg:px-8 py-12">
+    
+    <!-- Top Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-10 pb-10 border-b border-slate-800">
+      <!-- Brand & Description -->
+      <div class="lg:col-span-2">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
+            <i class="fas fa-graduation-cap text-white text-xl"></i>
+          </div>
+          <div>
+            <div class="font-black text-2xl tracking-tight">SCHOLARIFY</div>
+            <div class="text-sm text-slate-400">{% trans "Empowering futures through opportunities" %}</div>
+          </div>
+        </div>
+        <p class="text-slate-400 max-w-xl">
+          {% trans "A trusted Afghan platform connecting ambitious individuals with jobs, scholarships, and learning opportunities worldwide. We believe in empowering through education and access." %}
+        </p>
+        
+        <!-- Social Links -->
+        <div class="flex gap-4 mt-6">
+          <a href="#" class="h-10 w-10 rounded-full bg-slate-800 hover:bg-primary-600 flex items-center justify-center transition-all hover:-translate-y-1 touch-target">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="h-10 w-10 rounded-full bg-slate-800 hover:bg-primary-600 flex items-center justify-center transition-all hover:-translate-y-1 touch-target">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="h-10 w-10 rounded-full bg-slate-800 hover:bg-primary-600 flex items-center justify-center transition-all hover:-translate-y-1 touch-target">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+          <a href="#" class="h-10 w-10 rounded-full bg-slate-800 hover:bg-primary-600 flex items-center justify-center transition-all hover:-translate-y-1 touch-target">
+            <i class="fab fa-telegram"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <div class="text-lg font-bold mb-6 flex items-center gap-2">
+          <i class="fas fa-compass text-primary-400"></i>
+          {% trans "Explore" %}
+        </div>
+        <ul class="space-y-3">
+          <li><a href="/" class="text-slate-400 hover:text-white hover:underline transition-all flex items-center gap-2">
+            <i class="fas fa-chevron-right text-xs text-primary-500"></i>
+            {% trans "Home" %}
+          </a></li>
+          <li><a href="{% url 'listings_list' %}" class="text-slate-400 hover:text-white hover:underline transition-all flex items-center gap-2">
+            <i class="fas fa-chevron-right text-xs text-primary-500"></i>
+            {% trans "Browse Listings" %}
+          </a></li>
+          <!-- ADDED: Our Services in Footer -->
+          <li><a href="{% url 'pages:services' %}" class="text-slate-400 hover:text-white hover:underline transition-all flex items-center gap-2">
+            <i class="fas fa-chevron-right text-xs text-primary-500"></i>
+            {% trans "Our Services" %}
+          </a></li>
+          <li><a href="{% url 'pages:gallery' %}" class="text-slate-400 hover:text-white hover:underline transition-all flex items-center gap-2">
+            <i class="fas fa-chevron-right text-xs text-primary-500"></i>
+            {% trans "Success Gallery" %}
+          </a></li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div>
+        <div class="text-lg font-bold mb-6 flex items-center gap-2">
+          <i class="fas fa-life-ring text-primary-400"></i>
+          {% trans "Support" %}
+        </div>
+        <ul class="space-y-3">
+          <!-- ADDED: About Us in Footer -->
+          <li><a href="{% url 'pages:about' %}" class="text-slate-400 hover:text-white hover:underline transition-all flex items-center gap-2">
+            <i class="fas fa-chevron-right text-xs text-primary-500"></i>
+            {% trans "About Us" %}
+          </a></li>
+          <li><a href="{% url 'pages:contact' %}" class="text-slate-400 hover:text-white hover:underline transition-all flex items-center gap-2">
+            <i class="fas fa-chevron-right text-xs text-primary-500"></i>
+            {% trans "Contact Us" %}
+          </a></li>
+          {% if not request.user.is_authenticated %}
+            <li><a href="{% url 'accounts:login' %}" class="text-slate-400 hover:text-white hover:underline transition-all flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-primary-500"></i>
+              {% trans "Login" %}
+            </a></li>
+            <li><a href="{% url 'accounts:signup' %}" class="text-slate-400 hover:text-white hover:underline transition-all flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-primary-500"></i>
+              {% trans "Create Account" %}
+            </a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="text-slate-500 text-sm">
+        <div class="flex items-center gap-4">
+          <div>© {% now "Y" %} SCHOLARIFY. {% trans "All rights reserved." %}</div>
+          <div class="hidden md:block h-4 w-px bg-slate-700"></div>
+          <div>{% trans "Built with" %} <i class="fas fa-heart text-rose-500 mx-1"></i> {% trans "by Atta Tabee" %}</div>
+        </div>
+      </div>
+      
+      <!-- ADDED: Footer Links -->
+      <div class="flex gap-6 text-sm text-slate-500">
+        <a href="#" class="hover:text-white transition-colors">{% trans "Privacy Policy" %}</a>
+        <a href="#" class="hover:text-white transition-colors">{% trans "Terms of Service" %}</a>
+        <a href="#" class="hover:text-white transition-colors">{% trans "Cookie Policy" %}</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="fixed bottom-8 right-8 h-12 w-12 rounded-full bg-gradient-to-r from-primary-600 to-secondary-600 
+                text-white shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 
+                flex items-center justify-center z-40 opacity-0 translate-y-10 touch-target">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+</footer>
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+(function () {
+  // Language switching
+  function computeLangParts() {
+    const path = window.location.pathname || "/";
+    const m = path.match(/^\/(en|ps)\//);
+    const currentLang = m ? m[1] : "en";
+    const restPath = m ? path.replace(/^\/(en|ps)\//, "/") : path;
+    return { currentLang, restPath };
+  }
+
+  function switchLanguage(lang) {
+    const { restPath } = computeLangParts();
+    window.location.href = "/" + lang + restPath + window.location.search;
+  }
+
+  // Wire desktop select
+  const desktopSelect = document.getElementById("langSelect");
+  if (desktopSelect) {
+    const { currentLang } = computeLangParts();
+    desktopSelect.value = currentLang;
+    desktopSelect.addEventListener("change", function () {
+      switchLanguage(this.value);
+    });
+  }
+
+  // Wire mobile language buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      switchLanguage(this.dataset.lang);
+    });
+  });
+
+  // Mobile menu functionality - IMPROVED
+  const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+  const mobileMenuPanel = document.getElementById("mobileMenuPanel");
+  const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
+  const closeMobileMenuBtn = document.getElementById("closeMobileMenu");
+
+  function openMobileMenu() {
+    mobileMenuPanel.classList.remove("hidden");
+    mobileMenuOverlay.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    document.body.classList.add("menu-open");
+    
+    // Force reflow to ensure animation works
+    mobileMenuPanel.offsetHeight;
+    
+    setTimeout(() => {
+      mobileMenuPanel.classList.remove("translate-x-full");
+      mobileMenuOverlay.classList.add("opacity-100");
+    }, 10);
+  }
+
+  function closeMobileMenu() {
+    mobileMenuPanel.classList.add("translate-x-full");
+    mobileMenuOverlay.classList.remove("opacity-100");
+    
+    setTimeout(() => {
+      mobileMenuPanel.classList.add("hidden");
+      mobileMenuOverlay.classList.add("hidden");
+      document.body.style.overflow = "";
+      document.body.classList.remove("menu-open");
+    }, 300);
+  }
+
+  if (mobileMenuBtn && mobileMenuPanel && mobileMenuOverlay) {
+    mobileMenuBtn.addEventListener("click", openMobileMenu);
+    
+    // Add touch support for mobile
+    mobileMenuBtn.addEventListener("touchstart", function(e) {
+      e.preventDefault();
+      openMobileMenu();
+    });
+    
+    if (closeMobileMenuBtn) {
+      closeMobileMenuBtn.addEventListener("click", closeMobileMenu);
+      closeMobileMenuBtn.addEventListener("touchstart", function(e) {
+        e.preventDefault();
+        closeMobileMenu();
+      });
+    }
+    
+    mobileMenuOverlay.addEventListener("click", closeMobileMenu);
+    mobileMenuOverlay.addEventListener("touchstart", function(e) {
+      e.preventDefault();
+      closeMobileMenu();
+    });
+    
+    // Close menu on Escape key
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape" && !mobileMenuPanel.classList.contains("hidden")) {
+        closeMobileMenu();
+      }
+    });
+    
+    // Close menu when clicking on menu links (optional)
+    mobileMenuPanel.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', function() {
+        setTimeout(closeMobileMenu, 300);
+      });
+    });
+  }
+
+  // Back to top button
+  const backToTopBtn = document.getElementById("backToTop");
+  
+  function toggleBackToTop() {
+    if (window.scrollY > 300) {
+      backToTopBtn.classList.remove("opacity-0", "translate-y-10");
+      backToTopBtn.classList.add("opacity-100", "translate-y-0");
+    } else {
+      backToTopBtn.classList.remove("opacity-100", "translate-y-0");
+      backToTopBtn.classList.add("opacity-0", "translate-y-10");
+    }
+  }
+
+  if (backToTopBtn) {
+    window.addEventListener("scroll", toggleBackToTop);
+    toggleBackToTop(); // Initial check
+    
+    backToTopBtn.addEventListener("click", function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    backToTopBtn.addEventListener("touchstart", function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Add animation to elements on scroll
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-fade-in');
+      }
+    });
+  }, observerOptions);
+
+  // Observe all cards and sections
+  document.querySelectorAll('.hover-card, .glass, .animate-on-scroll').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Add ripple effect to buttons
+  document.addEventListener('click', function(e) {
+    const button = e.target.closest('button, a');
+    if (button && !button.classList.contains('no-ripple')) {
+      const ripple = document.createElement('span');
+      const rect = button.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+      
+      ripple.style.cssText = `
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.7);
+        transform: scale(0);
+        animation: ripple 0.6s linear;
+        width: ${size}px;
+        height: ${size}px;
+        top: ${y}px;
+        left: ${x}px;
+        pointer-events: none;
+        z-index: 1;
+      `;
+      
+      if (window.getComputedStyle(button).position === 'static') {
+        button.style.position = 'relative';
+      }
+      button.style.overflow = 'hidden';
+      button.appendChild(ripple);
+      
+      setTimeout(() => {
+        if (ripple.parentNode === button) {
+          button.removeChild(ripple);
+        }
+      }, 600);
+    }
+  });
+
+  // Add CSS for ripple animation
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    
+    /* Improve mobile menu scrolling */
+    #mobileMenuPanel {
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Better tap feedback */
+    .touch-target:active {
+      transform: scale(0.98);
+      transition: transform 0.1s ease;
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+// Prevent body scroll when menu is open
+document.addEventListener('touchmove', function(e) {
+  if (document.body.classList.contains('menu-open')) {
+    e.preventDefault();
+  }
+}, { passive: false });
+
+// Handle window resize - close menu on desktop
+window.addEventListener('resize', function() {
+  if (window.innerWidth >= 1024) { // lg breakpoint
+    const mobileMenuPanel = document.getElementById('mobileMenuPanel');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+    
+    if (mobileMenuPanel && !mobileMenuPanel.classList.contains('hidden')) {
+      mobileMenuPanel.classList.add('translate-x-full', 'hidden');
+      mobileMenuOverlay.classList.add('hidden');
+      document.body.style.overflow = '';
+      document.body.classList.remove('menu-open');
+    }
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "About Us" %} • SCHOLARIFY{% endblock %}
+
+{% block content %}
+<main class="max-w-7xl mx-auto px-4 py-10">
+  <div class="bg-white border rounded-3xl p-8 shadow-sm">
+    <h1 class="text-3xl md:text-4xl font-black tracking-tight">{% trans "About SCHOLARIFY" %}</h1>
+    <p class="mt-3 text-slate-600 max-w-2xl">
+      {% trans "We are dedicated to connecting Afghan students and professionals with opportunities worldwide." %}
+    </p>
+    
+    <div class="mt-8 space-y-6">
+      <div class="bg-gradient-to-r from-primary-50 to-secondary-50 border border-primary-100 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-slate-900">{% trans "Our Mission" %}</h2>
+        <p class="mt-2 text-slate-700">
+          {% trans "To empower individuals in Afghanistan by providing access to education, career opportunities, and professional growth resources." %}
+        </p>
+      </div>
+      
+      <div class="bg-gradient-to-r from-secondary-50 to-primary-50 border border-secondary-100 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-slate-900">{% trans "Our Vision" %}</h2>
+        <p class="mt-2 text-slate-700">
+          {% trans "A future where every Afghan has equal access to opportunities regardless of location or background." %}
+        </p>
+      </div>
+      
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-slate-900">{% trans "What We Do" %}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <div class="text-center">
+            <div class="h-12 w-12 rounded-xl bg-primary-100 flex items-center justify-center mx-auto mb-2">
+              <i class="fas fa-search text-primary-600"></i>
+            </div>
+            <div class="font-medium text-slate-900">{% trans "Opportunity Discovery" %}</div>
+            <p class="text-sm text-slate-600 mt-1">{% trans "Find verified jobs, scholarships, and courses" %}</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="h-12 w-12 rounded-xl bg-secondary-100 flex items-center justify-center mx-auto mb-2">
+              <i class="fas fa-handshake text-secondary-600"></i>
+            </div>
+            <div class="font-medium text-slate-900">{% trans "Application Support" %}</div>
+            <p class="text-sm text-slate-600 mt-1">{% trans "Guidance through application processes" %}</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="h-12 w-12 rounded-xl bg-primary-100 flex items-center justify-center mx-auto mb-2">
+              <i class="fas fa-users text-primary-600"></i>
+            </div>
+            <div class="font-medium text-slate-900">{% trans "Community Building" %}</div>
+            <p class="text-sm text-slate-600 mt-1">{% trans "Connect with peers and mentors" %}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

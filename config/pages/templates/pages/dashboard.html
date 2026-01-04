@@ -1,0 +1,695 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Admin Dashboard" %} • SCHOLARIFY{% endblock %}
+
+{% block content %}
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Header Section -->
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+    <div>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
+          <i class="fas fa-chart-line text-white text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-3xl lg:text-4xl font-black tracking-tight text-slate-900">
+            {% trans "Dashboard" %}
+          </h1>
+          <div class="flex items-center gap-3 mt-2">
+            <div class="flex items-center gap-2 text-sm text-slate-600">
+              <i class="fas fa-calendar-day text-primary-500"></i>
+              <span>{% trans "Today" %}: <span class="font-semibold text-slate-900">{{ today }}</span></span>
+            </div>
+            <div class="hidden sm:flex items-center gap-2 text-sm text-slate-600">
+              <i class="fas fa-clock text-amber-500"></i>
+              <span>{% trans "Closing soon" %}: <span class="font-semibold text-slate-900">{{ today }} → {{ soon }}</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="text-slate-600 max-w-2xl mt-3">
+        {% trans "Comprehensive overview of platform metrics, user engagement, and listing performance." %}
+      </p>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <a href="{% url 'listings_list' %}" 
+         class="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-slate-200 
+                bg-white text-slate-700 font-semibold hover:bg-slate-50 hover:border-primary-300 
+                hover:text-primary-700 transition-all duration-200">
+        <i class="fas fa-search"></i>
+        {% trans "Browse Listings" %}
+      </a>
+      <a href="{% url 'admin:index' %}" 
+         class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-secondary-600 
+                text-white font-bold hover:from-primary-700 hover:to-secondary-700 
+                hover:shadow-lg transition-all duration-200">
+        <i class="fas fa-cog"></i>
+        {% trans "Open Admin" %}
+      </a>
+      {% if user.is_superuser %}
+      <a href="{% url 'admin:listings_listing_add' %}" 
+         class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 
+                text-white font-bold hover:from-emerald-700 hover:to-emerald-600 
+                hover:shadow-lg transition-all duration-200">
+        <i class="fas fa-plus"></i>
+        {% trans "Add Listing" %}
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Listings -->
+    <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-lg hover-card">
+      <div class="flex items-center justify-between mb-4">
+        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center">
+          <i class="fas fa-list text-blue-600 text-lg"></i>
+        </div>
+        <div class="text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-100 text-blue-800">
+          {{ total_listings }}
+        </div>
+      </div>
+      <div class="text-2xl font-bold text-slate-900">{{ total_listings }}</div>
+      <div class="text-sm font-semibold text-slate-700 mb-1">{% trans "Total Listings" %}</div>
+      <div class="text-xs text-slate-500 flex items-center justify-between">
+        <span>{% trans "Featured" %}: <span class="font-semibold text-slate-700">{{ featured }}</span></span>
+        <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs">
+          {% if total_listings > 0 %}{{ featured|floatformat:0 }}{% else %}0{% endif %}%
+        </span>
+      </div>
+    </div>
+
+    <!-- Total Views -->
+    <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-lg hover-card">
+      <div class="flex items-center justify-between mb-4">
+        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-50 flex items-center justify-center">
+          <i class="fas fa-eye text-emerald-600 text-lg"></i>
+        </div>
+        <div class="text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-800">
+          +{% if views_last_7_days > 0 %}10{% else %}0{% endif %}%
+        </div>
+      </div>
+      <div class="text-2xl font-bold text-slate-900">{{ total_listing_views }}</div>
+      <div class="text-sm font-semibold text-slate-700 mb-1">{% trans "Total Views" %}</div>
+      <div class="text-xs text-slate-500 flex items-center justify-between">
+        <span>{% trans "Last 7 days" %}: <span class="font-semibold text-slate-700">{{ views_last_7_days }}</span></span>
+        <div class="flex items-center gap-1">
+          <i class="fas fa-chart-line text-emerald-500 text-xs"></i>
+          <span class="text-emerald-600 text-xs font-semibold">
+            {% if views_last_7_days > 0 %}10{% else %}0{% endif %}%
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Remote Listings -->
+    <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-lg hover-card">
+      <div class="flex items-center justify-between mb-4">
+        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center">
+          <i class="fas fa-wifi text-purple-600 text-lg"></i>
+        </div>
+        <div class="text-xs font-semibold px-3 py-1.5 rounded-full bg-purple-100 text-purple-800">
+          {% if total_listings > 0 %}{{ remote|floatformat:0 }}{% else %}0{% endif %}%
+        </div>
+      </div>
+      <div class="text-2xl font-bold text-slate-900">{{ remote }}</div>
+      <div class="text-sm font-semibold text-slate-700 mb-1">{% trans "Remote Listings" %}</div>
+      <div class="text-xs text-slate-500">
+        <span class="font-semibold text-slate-700">
+          {% if total_listings > 0 %}{{ remote|floatformat:1 }}{% else %}0{% endif %}%
+        </span> {% trans "of all listings" %}
+        <div class="w-full bg-slate-200 rounded-full h-1.5 mt-2">
+          <div class="bg-purple-600 h-1.5 rounded-full" 
+               style="width: {% if total_listings > 0 %}{{ remote }}{% else %}0{% endif %}%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closing Soon -->
+    <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-lg hover-card">
+      <div class="flex items-center justify-between mb-4">
+        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center">
+          <i class="fas fa-clock text-amber-600 text-lg"></i>
+        </div>
+        <div class="text-xs font-semibold px-3 py-1.5 rounded-full bg-amber-100 text-amber-800">
+          {% trans "Urgent" %}
+        </div>
+      </div>
+      <div class="text-2xl font-bold text-slate-900">{{ closing_soon }}</div>
+      <div class="text-sm font-semibold text-slate-700 mb-1">{% trans "Closing Soon (7 days)" %}</div>
+      <div class="text-xs text-slate-500 flex items-center justify-between">
+        <span>{% trans "Expired" %}: <span class="font-semibold text-slate-700">{{ expired }}</span></span>
+        <span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-xs">
+          {% if total_listings > 0 %}{{ expired|floatformat:0 }}{% else %}0{% endif %}%
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Charts Section -->
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+    <!-- Listings by Type -->
+    <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-lg lg:col-span-2">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900">{% trans "Listings by Type" %}</h3>
+          <p class="text-sm text-slate-600 mt-1">{% trans "Distribution of Jobs, Scholarships, and Courses" %}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1">
+            <div class="h-3 w-3 rounded-full bg-blue-500"></div>
+            <span class="text-xs text-slate-600">{% trans "Jobs" %}</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <div class="h-3 w-3 rounded-full bg-emerald-500"></div>
+            <span class="text-xs text-slate-600">{% trans "Scholarships" %}</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <div class="h-3 w-3 rounded-full bg-purple-500"></div>
+            <span class="text-xs text-slate-600">{% trans "Courses" %}</span>
+          </div>
+        </div>
+      </div>
+      <div class="h-64">
+        <canvas id="typeChart"></canvas>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-6">
+        <div class="text-center p-3 rounded-xl bg-blue-50">
+          <div class="text-2xl font-bold text-blue-700">{{ jobs|default:0 }}</div>
+          <div class="text-sm text-blue-800 font-semibold">{% trans "Jobs" %}</div>
+          <div class="text-xs text-blue-600">
+            {% if total_listings > 0 %}{{ jobs|floatformat:1 }}{% else %}0{% endif %}%
+          </div>
+        </div>
+        <div class="text-center p-3 rounded-xl bg-emerald-50">
+          <div class="text-2xl font-bold text-emerald-700">{{ scholarships|default:0 }}</div>
+          <div class="text-sm text-emerald-800 font-semibold">{% trans "Scholarships" %}</div>
+          <div class="text-xs text-emerald-600">
+            {% if total_listings > 0 %}{{ scholarships|floatformat:1 }}{% else %}0{% endif %}%
+          </div>
+        </div>
+        <div class="text-center p-3 rounded-xl bg-purple-50">
+          <div class="text-2xl font-bold text-purple-700">{{ courses|default:0 }}</div>
+          <div class="text-sm text-purple-800 font-semibold">{% trans "Courses" %}</div>
+          <div class="text-xs text-purple-600">
+            {% if total_listings > 0 %}{{ courses|floatformat:1 }}{% else %}0{% endif %}%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users by Gender -->
+    <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-lg">
+      <div class="mb-6">
+        <h3 class="text-xl font-bold text-slate-900">{% trans "Users by Gender" %}</h3>
+        <p class="text-sm text-slate-600 mt-1">{% trans "Registered user demographics" %}</p>
+      </div>
+      <div class="h-64">
+        <canvas id="genderChart"></canvas>
+      </div>
+      <div class="grid grid-cols-3 gap-3 mt-6">
+        <div class="text-center p-3 rounded-xl bg-blue-50">
+          <div class="text-lg font-bold text-blue-700">{{ male|default:0 }}</div>
+          <div class="text-xs text-blue-800 font-semibold">{% trans "Male" %}</div>
+          <div class="text-xs text-blue-600">
+            {% if male or female or na %}{{ male|floatformat:1 }}{% else %}0{% endif %}%
+          </div>
+        </div>
+        <div class="text-center p-3 rounded-xl bg-pink-50">
+          <div class="text-lg font-bold text-pink-700">{{ female|default:0 }}</div>
+          <div class="text-xs text-pink-800 font-semibold">{% trans "Female" %}</div>
+          <div class="text-xs text-pink-600">
+            {% if male or female or na %}{{ female|floatformat:1 }}{% else %}0{% endif %}%
+          </div>
+        </div>
+        <div class="text-center p-3 rounded-xl bg-slate-50">
+          <div class="text-lg font-bold text-slate-700">{{ na|default:0 }}</div>
+          <div class="text-xs text-slate-800 font-semibold">{% trans "Not Specified" %}</div>
+          <div class="text-xs text-slate-600">
+            {% if male or female or na %}{{ na|floatformat:1 }}{% else %}0{% endif %}%
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Detailed Analytics -->
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+    <!-- Top Countries -->
+    <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-lg">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900">{% trans "Top Countries" %}</h3>
+          <p class="text-sm text-slate-600 mt-1">{% trans "Geographic distribution of listings" %}</p>
+        </div>
+        <span class="px-3 py-1.5 rounded-full bg-primary-100 text-primary-800 text-xs font-semibold">
+          {{ top_countries|length }} {% trans "countries" %}
+        </span>
+      </div>
+      
+      <div class="space-y-4 mb-6">
+        {% for row in top_countries %}
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+              <i class="fas fa-globe-americas text-slate-600 text-sm"></i>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-slate-900">{{ row.country|default:"Unknown" }}</div>
+              <div class="text-xs text-slate-500">{{ row.c }} {% trans "listings" %}</div>
+            </div>
+          </div>
+          <div class="text-sm font-bold text-slate-900">{{ row.c }}</div>
+        </div>
+        {% empty %}
+        <div class="text-center py-8">
+          <div class="inline-flex h-12 w-12 rounded-full bg-slate-100 items-center justify-center mb-3">
+            <i class="fas fa-globe text-slate-400"></i>
+          </div>
+          <p class="text-sm text-slate-600">{% trans "No country data available yet." %}</p>
+        </div>
+        {% endfor %}
+      </div>
+      
+      <div class="h-48">
+        <canvas id="countryChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Top Viewed Listings -->
+    <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-lg">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900">{% trans "Most Viewed Listings" %}</h3>
+          <p class="text-sm text-slate-600 mt-1">{% trans "Top performing opportunities" %}</p>
+        </div>
+        <span class="px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
+          {{ top_viewed_listings|length }} {% trans "listings" %}
+        </span>
+      </div>
+      
+      <div class="space-y-4">
+        {% for row in top_viewed_listings %}
+        <div class="group p-4 rounded-xl border border-slate-200 hover:border-primary-300 hover:bg-primary-50/30 transition-all duration-200">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <a href="{% url 'listing_detail' row.listing.id %}" 
+                 class="text-sm font-semibold text-slate-900 hover:text-primary-700 transition-colors line-clamp-2">
+                {{ row.listing.title }}
+              </a>
+              {% if row.listing.organization %}
+              <div class="flex items-center gap-1 mt-1 text-xs text-slate-600">
+                <i class="fas fa-building text-slate-400 text-xs"></i>
+                <span class="truncate">{{ row.listing.organization }}</span>
+              </div>
+              {% endif %}
+              <div class="flex items-center gap-3 mt-2">
+                <span class="px-2 py-1 rounded-full text-xs 
+                          {% if row.listing.type == 'JOB' %}bg-blue-100 text-blue-800
+                          {% elif row.listing.type == 'SCHOLARSHIP' %}bg-emerald-100 text-emerald-800
+                          {% elif row.listing.type == 'COURSE' %}bg-purple-100 text-purple-800
+                          {% else %}bg-slate-100 text-slate-800{% endif %}">
+                  {{ row.listing.get_type_display }}
+                </span>
+                {% if row.listing.is_featured %}
+                <span class="px-2 py-1 rounded-full bg-amber-100 text-amber-800 text-xs">
+                  <i class="fas fa-star text-xs"></i> {% trans "Featured" %}
+                </span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="flex flex-col items-end">
+              <div class="text-lg font-bold text-slate-900">{{ row.views }}</div>
+              <div class="text-xs text-slate-500">{% trans "views" %}</div>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-8">
+          <div class="inline-flex h-12 w-12 rounded-full bg-slate-100 items-center justify-center mb-3">
+            <i class="fas fa-eye text-slate-400"></i>
+          </div>
+          <p class="text-sm text-slate-600">{% trans "No views recorded yet." %}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Latest Listings -->
+    <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-lg">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900">{% trans "Recent Listings" %}</h3>
+          <p class="text-sm text-slate-600 mt-1">{% trans "Newly added opportunities" %}</p>
+        </div>
+        <span class="px-3 py-1.5 rounded-full bg-primary-100 text-primary-800 text-xs font-semibold">
+          {{ latest_listings|length }} {% trans "recent" %}
+        </span>
+      </div>
+      
+      <div class="space-y-4">
+        {% for x in latest_listings %}
+        <div class="group p-4 rounded-xl border border-slate-200 hover:border-primary-300 hover:bg-primary-50/30 transition-all duration-200">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <a href="{% url 'listing_detail' x.id %}" 
+                 class="text-sm font-semibold text-slate-900 hover:text-primary-700 transition-colors line-clamp-2">
+                {{ x.title }}
+              </a>
+              <div class="flex items-center gap-2 mt-2">
+                <span class="px-2 py-1 rounded-full text-xs 
+                          {% if x.type == 'JOB' %}bg-blue-100 text-blue-800
+                          {% elif x.type == 'SCHOLARSHIP' %}bg-emerald-100 text-emerald-800
+                          {% elif x.type == 'COURSE' %}bg-purple-100 text-purple-800
+                          {% else %}bg-slate-100 text-slate-800{% endif %}">
+                  {{ x.get_type_display }}
+                </span>
+                {% if x.country %}
+                <span class="px-2 py-1 rounded-full bg-slate-100 text-slate-700 text-xs">
+                  <i class="fas fa-map-marker-alt text-xs"></i> {{ x.country }}
+                </span>
+                {% endif %}
+              </div>
+              {% if x.organization %}
+              <div class="mt-2 text-xs text-slate-600 truncate">
+                <i class="fas fa-building mr-1"></i>{{ x.organization }}
+              </div>
+              {% endif %}
+            </div>
+            <div class="flex flex-col items-end">
+              <div class="text-sm font-semibold text-slate-900">
+                {{ x.deadline|default:_("Rolling")|date:"M d" }}
+              </div>
+              <div class="text-xs text-slate-500">
+                {{ x.created_at|timesince }} {% trans "ago" %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-8">
+          <div class="inline-flex h-12 w-12 rounded-full bg-slate-100 items-center justify-center mb-3">
+            <i class="fas fa-inbox text-slate-400"></i>
+          </div>
+          <p class="text-sm text-slate-600">{% trans "No listings added yet." %}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Traffic Chart -->
+  <section class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-lg mb-8">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h3 class="text-xl font-bold text-slate-900">{% trans "Traffic Analytics" %}</h3>
+        <p class="text-sm text-slate-600 mt-1">{% trans "Daily views over the last 7 days" %}</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
+          <div class="h-3 w-8 rounded-sm bg-gradient-to-r from-primary-500 to-secondary-500"></div>
+          <span class="text-xs text-slate-600">{% trans "Views" %}</span>
+        </div>
+        <div class="text-sm text-slate-700">
+          {% trans "Total" %}: <span class="font-bold text-slate-900">{{ views_last_7_days }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="h-72">
+      <canvas id="viewsChart"></canvas>
+    </div>
+  </section>
+
+  <!-- Quick Actions -->
+  <section class="bg-gradient-to-br from-primary-50/50 to-secondary-50/30 border border-primary-200 rounded-2xl p-6">
+    <h3 class="text-xl font-bold text-slate-900 mb-4">{% trans "Quick Actions" %}</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="{% url 'admin:listings_listing_add' %}" 
+         class="p-4 rounded-xl bg-white border border-slate-200 hover:border-primary-300 
+                hover:shadow-md transition-all duration-200 flex items-center gap-3">
+        <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-emerald-100 to-emerald-50 flex items-center justify-center">
+          <i class="fas fa-plus text-emerald-600"></i>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">{% trans "Add Listing" %}</div>
+          <div class="text-xs text-slate-500">{% trans "Create new opportunity" %}</div>
+        </div>
+      </a>
+      
+      <!-- Fixed URL - Using direct admin URL -->
+      <a href="/admin/auth/user/" 
+         class="p-4 rounded-xl bg-white border border-slate-200 hover:border-primary-300 
+                hover:shadow-md transition-all duration-200 flex items-center gap-3">
+        <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center">
+          <i class="fas fa-users text-blue-600"></i>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">{% trans "Manage Users" %}</div>
+          <div class="text-xs text-slate-500">{% trans "View registered users" %}</div>
+        </div>
+      </a>
+      
+      <a href="{% url 'admin:listings_listing_changelist' %}" 
+         class="p-4 rounded-xl bg-white border border-slate-200 hover:border-primary-300 
+                hover:shadow-md transition-all duration-200 flex items-center gap-3">
+        <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center">
+          <i class="fas fa-edit text-purple-600"></i>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">{% trans "Edit Listings" %}</div>
+          <div class="text-xs text-slate-500">{% trans "Manage all opportunities" %}</div>
+        </div>
+      </a>
+      
+      <a href="{% url 'pages:contact' %}" 
+         class="p-4 rounded-xl bg-white border border-slate-200 hover:border-primary-300 
+                hover:shadow-md transition-all duration-200 flex items-center gap-3">
+        <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center">
+          <i class="fas fa-envelope text-amber-600"></i>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">{% trans "View Messages" %}</div>
+          <div class="text-xs text-slate-500">{% trans "Check contact inquiries" %}</div>
+        </div>
+      </a>
+    </div>
+  </section>
+</main>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // Chart colors
+  const chartColors = {
+    blue: '#3b82f6',
+    emerald: '#10b981',
+    purple: '#8b5cf6',
+    pink: '#ec4899',
+    amber: '#f59e0b',
+    primary: '#0ea5e9',
+    secondary: '#d946ef',
+    slate: '#64748b'
+  };
+
+  // Listings by type data
+  const typeData = {
+    labels: ["{% trans 'Jobs' %}", "{% trans 'Scholarships' %}", "{% trans 'Courses' %}"],
+    datasets: [{
+      data: [{{ jobs|default:0 }}, {{ scholarships|default:0 }}, {{ courses|default:0 }}],
+      backgroundColor: [chartColors.blue, chartColors.emerald, chartColors.purple],
+      borderColor: ['white', 'white', 'white'],
+      borderWidth: 2,
+      borderRadius: 8,
+      hoverOffset: 12
+    }]
+  };
+
+  // Users by gender data
+  const genderData = {
+    labels: ["{% trans 'Male' %}", "{% trans 'Female' %}", "{% trans 'Not Specified' %}"],
+    datasets: [{
+      data: [{{ male|default:0 }}, {{ female|default:0 }}, {{ na|default:0 }}],
+      backgroundColor: [chartColors.blue, chartColors.pink, chartColors.slate],
+      borderColor: ['white', 'white', 'white'],
+      borderWidth: 2,
+      borderRadius: 8,
+      hoverOffset: 12
+    }]
+  };
+
+  // Views chart data
+  const viewsData = {
+    labels: [{% for d in views_labels %}"{{ d }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+    datasets: [{
+      label: "{% trans 'Views' %}",
+      data: [{% for v in views_data %}{{ v|default:0 }}{% if not forloop.last %},{% endif %}{% endfor %}],
+      borderColor: chartColors.primary,
+      backgroundColor: 'rgba(14, 165, 233, 0.1)',
+      borderWidth: 3,
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: chartColors.primary,
+      pointBorderColor: 'white',
+      pointBorderWidth: 2,
+      pointRadius: 5,
+      pointHoverRadius: 7
+    }]
+  };
+
+  // Countries chart data
+  const countryLabels = [{% for row in top_countries %}"{{ row.country|default:'(Unknown)'|escapejs }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+  const countryData = [{% for row in top_countries %}{{ row.c|default:0 }}{% if not forloop.last %},{% endif %}{% endfor %}];
+  
+  const countryChartData = {
+    labels: countryLabels,
+    datasets: [{
+      data: countryData,
+      backgroundColor: Array(countryLabels.length).fill().map((_, i) => 
+        i % 3 === 0 ? chartColors.primary : 
+        i % 3 === 1 ? chartColors.secondary : 
+        chartColors.emerald
+      ),
+      borderColor: 'white',
+      borderWidth: 1,
+      borderRadius: 6
+    }]
+  };
+
+  // Initialize charts
+  document.addEventListener('DOMContentLoaded', function() {
+    // Type Chart (Bar)
+    if (document.getElementById('typeChart')) {
+      new Chart(document.getElementById('typeChart'), {
+        type: 'bar',
+        data: typeData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(15, 23, 42, 0.9)',
+              titleColor: '#f8fafc',
+              bodyColor: '#f8fafc',
+              borderColor: '#334155',
+              borderWidth: 1
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(226, 232, 240, 0.5)' },
+              ticks: { color: '#64748b' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: '#64748b' }
+            }
+          }
+        }
+      });
+    }
+
+    // Gender Chart (Doughnut)
+    if (document.getElementById('genderChart')) {
+      new Chart(document.getElementById('genderChart'), {
+        type: 'doughnut',
+        data: genderData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '70%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 20,
+                usePointStyle: true,
+                pointStyle: 'circle',
+                color: '#64748b'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Views Chart (Line)
+    if (document.getElementById('viewsChart')) {
+      new Chart(document.getElementById('viewsChart'), {
+        type: 'line',
+        data: viewsData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(226, 232, 240, 0.5)' },
+              ticks: { color: '#64748b' }
+            },
+            x: {
+              grid: { color: 'rgba(226, 232, 240, 0.5)' },
+              ticks: { color: '#64748b' }
+            }
+          }
+        }
+      });
+    }
+
+    // Country Chart (if data exists)
+    if (countryLabels.length > 0 && document.getElementById('countryChart')) {
+      new Chart(document.getElementById('countryChart'), {
+        type: 'bar',
+        data: countryChartData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: 'y',
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              grid: { color: 'rgba(226, 232, 240, 0.5)' },
+              ticks: { color: '#64748b' }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { color: '#64748b' }
+            }
+          }
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  .hover-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
+{% endblock %}

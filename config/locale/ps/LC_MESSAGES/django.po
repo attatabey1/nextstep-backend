@@ -1,0 +1,472 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-31 18:17+0430\n"
+"PO-Revision-Date: 2025-12-26 19:55+0430\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ps\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\Backend\config\accounts\templates\accounts\Login.html:7
+#: .\Backend\config\accounts\templates\accounts\Login.html:65
+#: .\Backend\config\accounts\templates\accounts\signup.html:117
+#: .\Backend\config\listings\templates\base.html:46
+msgid "Login"
+msgstr "ننوتل"
+
+#: .\Backend\config\accounts\templates\accounts\Login.html:16
+msgid "Welcome back"
+msgstr "بېرته ښه راغلاست"
+
+#: .\Backend\config\accounts\templates\accounts\Login.html:17
+msgid "Login to apply and manage your account."
+msgstr "د غوښتنې او د خپل حساب د مدیریت لپاره ننوتل."
+
+#: .\Backend\config\accounts\templates\accounts\Login.html:23
+msgid "Please correct the errors below."
+msgstr "مهرباني وکړئ لاندې تېروتنې اصلاح کړئ."
+
+#: .\Backend\config\accounts\templates\accounts\Login.html:31
+#: .\Backend\config\accounts\templates\accounts\signup.html:26
+#: .\Backend\config\accounts\templates\accounts\signup.html:31
+msgid "Username"
+msgstr "کارن نوم"
+
+#: .\Backend\config\accounts\templates\accounts\Login.html:38
+msgid "Enter your username"
+msgstr "خپل کارن نوم داخل کړئ"
+
+#: .\Backend\config\accounts\templates\accounts\Login.html:47
+#: .\Backend\config\accounts\templates\accounts\signup.html:60
+msgid "Password"
+msgstr "رمز"
+
+#: .\Backend\config\accounts\templates\accounts\Login.html:54
+msgid "Enter your password"
+msgstr "خپل رمز داخل کړئ"
+
+#: .\Backend\config\accounts\templates\accounts\Login.html:69
+msgid "Don't have an account?"
+msgstr "حساب نلرئ؟"
+
+#: .\Backend\config\accounts\templates\accounts\Login.html:70
+#: .\Backend\config\accounts\templates\accounts\signup.html:111
+#: .\Backend\config\listings\templates\base.html:47
+msgid "Sign up"
+msgstr "حساب جوړ کړئ"
+
+#: .\Backend\config\accounts\templates\accounts\Login.html:77
+msgid "Back to Home"
+msgstr "کور ته بېرته"
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:4
+#: .\Backend\config\accounts\templates\accounts\signup.html:10
+msgid "Create account"
+msgstr "حساب جوړول"
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:11
+msgid "Register to apply and subscribe."
+msgstr "د غوښتنې او ګډون لپاره ثبت شئ."
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:43
+#: .\Backend\config\pages\templates\pages\contact.html:20
+msgid "Email"
+msgstr "برېښنالیک"
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:48
+msgid "Email address"
+msgstr "د برېښنالیک پته"
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:66
+msgid "Create a strong password"
+msgstr "یو قوي رمز جوړ کړئ"
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:73
+#: .\Backend\config\accounts\templates\accounts\signup.html:102
+#, fuzzy
+#| msgid "Showing"
+msgid "Show"
+msgstr "ښودل کېږي"
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:81
+msgid "Use at least 8 characters"
+msgstr "تر لږه ۸ توري وکاروئ"
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:82
+msgid "Mix letters and numbers"
+msgstr "حروف او شمېرې ګډ کړئ"
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:83
+msgid "Avoid common passwords"
+msgstr "عادي رمزونه مه کاروئ"
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:89
+msgid "Confirm password"
+msgstr "رمز تایید کړئ"
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:95
+msgid "Repeat the same password"
+msgstr "هماغه رمز بیا تکرار کړئ"
+
+#: .\Backend\config\accounts\templates\accounts\signup.html:116
+msgid "Already have an account?"
+msgstr "آیا حساب لرئ؟"
+
+#: .\Backend\config\listings\templates\base.html:25
+msgid "Home"
+msgstr "کور"
+
+#: .\Backend\config\listings\templates\base.html:26
+#: .\Backend\config\listings\templates\listings\detail.html:26
+#: .\Backend\config\listings\templates\listings\home.html:24
+#: .\Backend\config\listings\templates\listings\list.html:7
+msgid "Browse"
+msgstr "کتل"
+
+#: .\Backend\config\listings\templates\base.html:27
+#: .\Backend\config\listings\templates\listings\home.html:25
+#: .\Backend\config\listings\templates\listings\home.html:101
+#: .\Backend\config\listings\templates\listings\list.html:90
+#: .\Backend\config\listings\templates\listings\list.html:170
+msgid "Closing soon"
+msgstr "ژر بندېږي"
+
+#: .\Backend\config\listings\templates\base.html:28
+#: .\Backend\config\listings\templates\listings\home.html:26
+#: .\Backend\config\pages\templates\pages\services.html:4
+msgid "Services"
+msgstr "خدمات"
+
+#: .\Backend\config\listings\templates\base.html:29
+#: .\Backend\config\listings\templates\listings\home.html:27
+#: .\Backend\config\pages\templates\pages\gallery.html:4
+#: .\Backend\config\pages\templates\pages\gallery.html:11
+msgid "Gallery"
+msgstr "ګالري"
+
+#: .\Backend\config\listings\templates\base.html:30
+#: .\Backend\config\listings\templates\listings\home.html:28
+#: .\Backend\config\pages\templates\pages\contact.html:4
+msgid "Contact"
+msgstr "اړیکه"
+
+#: .\Backend\config\listings\templates\base.html:33
+msgid "visits"
+msgstr "کتنې"
+
+#: .\Backend\config\listings\templates\base.html:42
+msgid "Logout"
+msgstr "وتل"
+
+#: .\Backend\config\listings\templates\base.html:51
+#: .\Backend\config\listings\templates\listings\detail.html:27
+#: .\Backend\config\listings\templates\listings\home.html:30
+#: .\Backend\config\listings\templates\listings\list.html:78
+msgid "Admin"
+msgstr "اداره"
+
+#: .\Backend\config\listings\templates\base.html:73
+msgid "All rights reserved"
+msgstr "ټولې حقوق خوندي دي"
+
+#: .\Backend\config\listings\templates\listings\detail.html:71
+#: .\Backend\config\listings\templates\listings\home.html:119
+#: .\Backend\config\listings\templates\listings\home.html:156
+#: .\Backend\config\listings\templates\listings\list.html:177
+#: .\Backend\config\listings\templates\listings\list.html:200
+msgid "Remote"
+msgstr "انلاین"
+
+#: .\Backend\config\listings\templates\listings\detail.html:74
+#: .\Backend\config\listings\templates\listings\home.html:110
+#: .\Backend\config\listings\templates\listings\list.html:204
+msgid "Featured"
+msgstr "ځانګړي"
+
+#: .\Backend\config\listings\templates\listings\detail.html:87
+msgid "Organization"
+msgstr "سازمان"
+
+#: .\Backend\config\listings\templates\listings\detail.html:93
+msgid "views"
+msgstr "کتنې"
+
+#: .\Backend\config\listings\templates\listings\detail.html:102
+msgid "Save"
+msgstr "خوندي کړئ"
+
+#: .\Backend\config\listings\templates\listings\detail.html:108
+msgid "Login to save"
+msgstr "د خوندي کولو لپاره ننوتل"
+
+#: .\Backend\config\listings\templates\listings\detail.html:118
+#: .\Backend\config\listings\templates\listings\list.html:161
+msgid "Country"
+msgstr "هېواد"
+
+#: .\Backend\config\listings\templates\listings\detail.html:126
+#: .\Backend\config\listings\templates\listings\home.html:132
+#: .\Backend\config\listings\templates\listings\list.html:167
+#: .\Backend\config\listings\templates\listings\list.html:223
+msgid "Deadline"
+msgstr "وروستۍ نېټه"
+
+#: .\Backend\config\listings\templates\listings\detail.html:127
+#: .\Backend\config\listings\templates\listings\home.html:133
+#: .\Backend\config\listings\templates\listings\list.html:224
+msgid "No deadline"
+msgstr "وروستۍ نېټه نه لري"
+
+#: .\Backend\config\listings\templates\listings\detail.html:133
+msgid "Description"
+msgstr "تفصیل"
+
+#: .\Backend\config\listings\templates\listings\detail.html:145
+#: .\Backend\config\listings\templates\listings\list.html:236
+msgid "Apply"
+msgstr "غوښتنه"
+
+#: .\Backend\config\listings\templates\listings\detail.html:148
+msgid ""
+"Use the official link to apply. Always verify details on the original "
+"website."
+msgstr ""
+"د غوښتنلیک لپاره رسمي لینک وکاروئ. تل د اصلي ویبپاڼې معلومات تایید کړئ."
+
+#: .\Backend\config\listings\templates\listings\detail.html:155
+msgid "Apply on official website"
+msgstr "په رسمي ویبپاڼه کې غوښتنه وکړئ"
+
+#: .\Backend\config\listings\templates\listings\detail.html:159
+msgid "No apply link provided yet."
+msgstr "تر اوسه لپاره د غوښتنې لینک نه دی ورکړل شوی."
+
+#: .\Backend\config\listings\templates\listings\detail.html:166
+msgid "Back to listings"
+msgstr "بېرته اعلانونو ته"
+
+#: .\Backend\config\listings\templates\listings\home.html:69
+msgid "Find Jobs, Scholarships & Courses — fast."
+msgstr "دندې، بورسونه او کورسونه ژر ومومئ"
+
+#: .\Backend\config\listings\templates\listings\home.html:72
+msgid ""
+"Search opportunities and apply directly. Built for people who want the next "
+"step."
+msgstr "فرصتونه ولټوئ او مستقیم غوښتنلیک ورکړئ. د راتلونکې پړاو لپاره جوړ شوی."
+
+#: .\Backend\config\listings\templates\listings\home.html:81
+msgid "Search by title, organization, country..."
+msgstr "د سرلیک، ادارې یا هېواد له مخې ولټوئ"
+
+#: .\Backend\config\listings\templates\listings\home.html:86
+msgid "All types"
+msgstr "ټول ډولونه"
+
+#: .\Backend\config\listings\templates\listings\home.html:87
+#: .\Backend\config\listings\templates\listings\list.html:154
+msgid "Job"
+msgstr "دنده"
+
+#: .\Backend\config\listings\templates\listings\home.html:88
+#: .\Backend\config\listings\templates\listings\list.html:155
+msgid "Scholarship"
+msgstr "بورس"
+
+#: .\Backend\config\listings\templates\listings\home.html:89
+#: .\Backend\config\listings\templates\listings\list.html:156
+msgid "Course"
+msgstr "کورس"
+
+#: .\Backend\config\listings\templates\listings\home.html:93
+#: .\Backend\config\listings\templates\listings\list.html:43
+msgid "Search"
+msgstr "لټون"
+
+#: .\Backend\config\listings\templates\listings\home.html:98
+#: .\Backend\config\listings\templates\listings\list.html:95
+msgid "Jobs"
+msgstr "دندې"
+
+#: .\Backend\config\listings\templates\listings\home.html:99
+#: .\Backend\config\listings\templates\listings\list.html:100
+msgid "Scholarships"
+msgstr "بورسونه"
+
+#: .\Backend\config\listings\templates\listings\home.html:100
+#: .\Backend\config\listings\templates\listings\list.html:105
+msgid "Courses"
+msgstr "کورسونه"
+
+#: .\Backend\config\listings\templates\listings\home.html:102
+#: .\Backend\config\listings\templates\listings\list.html:110
+msgid "Remote only"
+msgstr "یوازې انلاین"
+
+#: .\Backend\config\listings\templates\listings\home.html:111
+msgid "Browse all"
+msgstr "ټول وګورئ"
+
+#: .\Backend\config\listings\templates\listings\home.html:138
+msgid "No featured listings yet. Mark some items as Featured in Admin."
+msgstr "تر اوسه ځانګړي اعلانونه نشته. له ادارې څخه ځینې اعلانونه ځانګړي وټاکئ."
+
+#: .\Backend\config\listings\templates\listings\home.html:147
+#: .\Backend\config\listings\templates\listings\list.html:85
+msgid "Latest"
+msgstr "وروستي"
+
+#: .\Backend\config\listings\templates\listings\home.html:148
+msgid "See more"
+msgstr "نور وګورئ"
+
+#: .\Backend\config\listings\templates\listings\home.html:170
+msgid "No listings yet. Add items from Admin."
+msgstr "تر اوسه اعلانونه نشته. له ادارې اعلانونه اضافه کړئ."
+
+#: .\Backend\config\listings\templates\listings\home.html:178
+msgid "Built with Django + PostgreSQL"
+msgstr "د Django او PostgreSQL په وسیله جوړ شوی"
+
+#: .\Backend\config\listings\templates\listings\list.html:37
+msgid "Search jobs, scholarships, courses..."
+msgstr "دندې، بورسونه او کورسونه ولټوئ"
+
+#: .\Backend\config\listings\templates\listings\list.html:115
+msgid "Reset"
+msgstr "بیا تنظیم"
+
+#: .\Backend\config\listings\templates\listings\list.html:125
+msgid "Browse Opportunities"
+msgstr "فرصتونه وګورئ"
+
+#: .\Backend\config\listings\templates\listings\list.html:128
+msgid "Find jobs, scholarships, and courses — apply directly."
+msgstr "دندې، بورسونه او کورسونه ومومئ او مستقیم غوښتنه وکړئ."
+
+#: .\Backend\config\listings\templates\listings\list.html:134
+msgid "Showing"
+msgstr "ښودل کېږي"
+
+#: .\Backend\config\listings\templates\listings\list.html:138
+#: .\Backend\config\listings\templates\listings\list.html:254
+msgid "of"
+msgstr "له"
+
+#: .\Backend\config\listings\templates\listings\list.html:151
+msgid "Type"
+msgstr "ډول"
+
+#: .\Backend\config\listings\templates\listings\list.html:153
+msgid "All"
+msgstr "ټول"
+
+#: .\Backend\config\listings\templates\listings\list.html:162
+msgid "e.g., Afghanistan"
+msgstr "لکه: افغانستان"
+
+#: .\Backend\config\listings\templates\listings\list.html:169
+msgid "Any"
+msgstr "هر یو"
+
+#: .\Backend\config\listings\templates\listings\list.html:181
+msgid "Apply filters"
+msgstr "فلټرونه تطبیق کړئ"
+
+#: .\Backend\config\listings\templates\listings\list.html:230
+msgid "View"
+msgstr "کتل"
+
+#: .\Backend\config\listings\templates\listings\list.html:243
+msgid "No listings found. Try changing filters or add items from Admin."
+msgstr "هیڅ اعلان ونه موندل شو. فلټرونه بدل کړئ یا له ادارې اعلان اضافه کړئ."
+
+#: .\Backend\config\listings\templates\listings\list.html:252
+msgid "Page"
+msgstr "پاڼه"
+
+#: .\Backend\config\listings\templates\listings\list.html:262
+msgid "Prev"
+msgstr "مخکینی"
+
+#: .\Backend\config\listings\templates\listings\list.html:269
+msgid "Next"
+msgstr "بل"
+
+#: .\Backend\config\pages\templates\pages\contact.html:8
+msgid "Contact Us"
+msgstr "موږ سره اړیکه ونیسئ"
+
+#: .\Backend\config\pages\templates\pages\contact.html:9
+msgid "Send us a message and we will reply soon."
+msgstr "موږ ته پیغام واستوئ او ژر به مو ځواب درکړو."
+
+#: .\Backend\config\pages\templates\pages\contact.html:15
+msgid "Name"
+msgstr "نوم"
+
+#: .\Backend\config\pages\templates\pages\contact.html:25
+msgid "Message"
+msgstr "پیغام"
+
+#: .\Backend\config\pages\templates\pages\contact.html:30
+msgid "Send message"
+msgstr "پیغام واستوئ"
+
+#: .\Backend\config\pages\templates\pages\gallery.html:12
+msgid "Highlights, events, partners, and announcements."
+msgstr "مهمې پېښې، شریکان او اعلانونه."
+
+#: .\Backend\config\pages\templates\pages\gallery.html:16
+msgid "Manage in Admin"
+msgstr "په اډمین کې مدیریت"
+
+#: .\Backend\config\pages\templates\pages\gallery.html:28
+msgid "View image"
+msgstr "انځور وګورئ"
+
+#: .\Backend\config\pages\templates\pages\gallery.html:37
+msgid "Untitled"
+msgstr "بې سرلیک"
+
+#: .\Backend\config\pages\templates\pages\gallery.html:48
+msgid "Like"
+msgstr "خوښول"
+
+#: .\Backend\config\pages\templates\pages\gallery.html:56
+#: .\Backend\config\pages\templates\pages\gallery.html:92
+msgid "Open"
+msgstr "خلاص"
+
+#: .\Backend\config\pages\templates\pages\gallery.html:60
+#: .\Backend\config\pages\templates\pages\gallery.html:95
+msgid "Download"
+msgstr "ډاونلوډ"
+
+#: .\Backend\config\pages\templates\pages\gallery.html:67
+#, fuzzy
+#| msgid "No listings yet. Add items from Admin."
+msgid "No images yet. Add some from Admin."
+msgstr "تر اوسه انځورونه نشته. له اډمین څخه اضافه کړئ."
+
+#: .\Backend\config\pages\templates\pages\gallery.html:84
+msgid "Close"
+msgstr "بندول"
+
+#: .\Backend\config\pages\templates\pages\services.html:8
+msgid "Our Services"
+msgstr "زموږ خدمات"
+
+#: .\Backend\config\pages\templates\pages\services.html:9
+msgid "We help you find opportunities and apply faster."
+msgstr "موږ تاسو سره د فرصتونو موندلو او په چټکۍ سره غوښتنې کې مرسته کوو."

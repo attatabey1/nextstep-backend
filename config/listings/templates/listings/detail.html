@@ -1,0 +1,662 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ item.title }} • SCHOLARIFY{% endblock %}
+
+{% block content %}
+<main class="responsive-container py-8 lg:py-12 xl:py-16">
+  
+  <!-- Breadcrumb -->
+  <nav class="mb-8 lg:mb-12" aria-label="Breadcrumb">
+    <ol class="flex items-center flex-wrap gap-2 text-sm lg:text-base text-slate-600">
+      <li>
+        <a href="{% url 'listings_list' %}" class="hover:text-primary-600 transition-colors">
+          {% trans "Opportunities" %}
+        </a>
+      </li>
+      <li class="flex items-center">
+        <i class="fas fa-chevron-right mx-2 text-xs text-slate-400"></i>
+      </li>
+      <li class="text-primary-700 font-semibold truncate" aria-current="page">
+        {{ item.title|truncatechars:50 }}
+      </li>
+    </ol>
+  </nav>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+    
+    <!-- Main Content Column -->
+    <section class="lg:col-span-2 space-y-8 lg:space-y-12">
+      
+      <!-- Hero Card -->
+      <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-3xl lg:rounded-[2rem] p-6 lg:p-8 xl:p-10 shadow-lg hover-card">
+        
+        <!-- Header with Badges -->
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 lg:gap-6 mb-6 lg:mb-8">
+          <div class="flex-1">
+            <!-- Type Badge -->
+            <div class="inline-flex items-center flex-wrap gap-2 mb-4 lg:mb-6">
+              <span class="px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-xs lg:text-sm font-semibold 
+                         bg-gradient-to-r from-primary-100 to-primary-50 text-primary-800 
+                         border border-primary-200 capitalize">
+                <i class="fas 
+                  {% if item.type == 'job' %} fa-briefcase
+                  {% elif item.type == 'scholarship' %} fa-graduation-cap
+                  {% elif item.type == 'course' %} fa-book-open
+                  {% else %} fa-star {% endif %} 
+                  mr-1 lg:mr-2"></i>
+                {{ item.type|title }}
+              </span>
+              
+              {% if item.remote %}
+              <span class="px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-xs lg:text-sm font-semibold 
+                         bg-gradient-to-r from-emerald-100 to-emerald-50 text-emerald-800 
+                         border border-emerald-200">
+                <i class="fas fa-wifi mr-1 lg:mr-2"></i>
+                {% trans "Remote" %}
+              </span>
+              {% endif %}
+              
+              {% if item.is_featured %}
+              <span class="px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-xs lg:text-sm font-semibold 
+                         bg-gradient-to-r from-amber-100 to-amber-50 text-amber-800 
+                         border border-amber-200">
+                <i class="fas fa-star mr-1 lg:mr-2"></i>
+                {% trans "Featured" %}
+              </span>
+              {% endif %}
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-black text-slate-900 leading-tight">
+              {{ item.title }}
+            </h1>
+            
+            <!-- Organization -->
+            {% if item.organization %}
+            <div class="mt-4 lg:mt-6 flex items-center gap-3 lg:gap-4">
+              <div class="h-10 w-10 lg:h-12 lg:w-12 rounded-xl lg:rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                <i class="fas fa-building text-slate-600 text-base lg:text-lg"></i>
+              </div>
+              <div>
+                <div class="text-sm lg:text-base text-slate-600">{% trans "Organization" %}</div>
+                <div class="text-lg lg:text-xl xl:text-2xl font-semibold text-slate-900">{{ item.organization }}</div>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+          
+          <!-- Save Button -->
+          {% if user.is_authenticated %}
+          <button id="saveBtn" data-listing-id="{{ item.id }}"
+            class="self-start inline-flex items-center gap-2 px-5 lg:px-6 py-2.5 lg:py-3 rounded-xl lg:rounded-2xl 
+                   border border-slate-200 bg-white text-sm lg:text-base font-semibold 
+                   hover:bg-slate-50 hover:border-primary-300 hover:text-primary-700 
+                   transition-all duration-200">
+            <i class="far fa-star text-base lg:text-lg"></i>
+            <span>{% trans "Save" %}</span>
+          </button>
+          {% endif %}
+        </div>
+
+        <!-- Image -->
+        {% if item.image %}
+        <div class="mb-8 lg:mb-10">
+          <div class="relative rounded-2xl lg:rounded-3xl overflow-hidden border border-slate-200 shadow-lg">
+            <img src="{{ item.image.url }}" alt="{{ item.title }}"
+                 class="w-full h-64 lg:h-80 xl:h-96 2xl:h-[28rem] object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Key Details Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mb-8 lg:mb-10">
+          <!-- Deadline -->
+          <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-xl lg:rounded-2xl p-4 lg:p-5">
+            <div class="flex items-center gap-3 lg:gap-4">
+              <div class="h-10 w-10 lg:h-12 lg:w-12 rounded-lg lg:rounded-xl bg-gradient-to-br from-rose-100 to-rose-50 flex items-center justify-center">
+                <i class="fas fa-clock text-rose-600 text-base lg:text-lg"></i>
+              </div>
+              <div>
+                <div class="text-xs lg:text-sm text-slate-500 uppercase font-semibold">{% trans "Deadline" %}</div>
+                <div class="text-lg lg:text-xl font-bold text-slate-900">
+                  {{ item.deadline|default:_("Rolling")|date:"M d, Y" }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Location -->
+          {% if item.country %}
+          <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-xl lg:rounded-2xl p-4 lg:p-5">
+            <div class="flex items-center gap-3 lg:gap-4">
+              <div class="h-10 w-10 lg:h-12 lg:w-12 rounded-lg lg:rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center">
+                <i class="fas fa-globe-americas text-primary-600 text-base lg:text-lg"></i>
+              </div>
+              <div>
+                <div class="text-xs lg:text-sm text-slate-500 uppercase font-semibold">{% trans "Location" %}</div>
+                <div class="text-lg lg:text-xl font-bold text-slate-900">{{ item.country }}</div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Posted Date -->
+          <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-xl lg:rounded-2xl p-4 lg:p-5">
+            <div class="flex items-center gap-3 lg:gap-4">
+              <div class="h-10 w-10 lg:h-12 lg:w-12 rounded-lg lg:rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-50 flex items-center justify-center">
+                <i class="fas fa-calendar-alt text-emerald-600 text-base lg:text-lg"></i>
+              </div>
+              <div>
+                <div class="text-xs lg:text-sm text-slate-500 uppercase font-semibold">{% trans "Posted" %}</div>
+                <div class="text-lg lg:text-xl font-bold text-slate-900">{{ item.created_at|date:"M d, Y" }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-8 lg:mb-10">
+          <div class="flex items-center gap-3 lg:gap-4 mb-6 lg:mb-8">
+            <div class="h-8 w-1 lg:h-10 lg:w-1.5 bg-gradient-to-b from-primary-500 to-secondary-500 rounded-full"></div>
+            <h2 class="text-2xl lg:text-3xl xl:text-4xl font-bold text-slate-900">{% trans "Description" %}</h2>
+          </div>
+          
+          <div class="prose max-w-none text-slate-700 leading-relaxed text-base lg:text-lg xl:text-xl">
+            {{ item.description|linebreaks }}
+          </div>
+        </div>
+
+        <!-- Requirements (if any) -->
+        {% if item.requirements %}
+        <div class="mb-8 lg:mb-10">
+          <div class="flex items-center gap-3 lg:gap-4 mb-6 lg:mb-8">
+            <div class="h-8 w-1 lg:h-10 lg:w-1.5 bg-gradient-to-b from-primary-500 to-secondary-500 rounded-full"></div>
+            <h2 class="text-2xl lg:text-3xl xl:text-4xl font-bold text-slate-900">{% trans "Requirements" %}</h2>
+          </div>
+          
+          <div class="prose max-w-none text-slate-700 leading-relaxed text-base lg:text-lg xl:text-xl">
+            {{ item.requirements|linebreaks }}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Benefits (if any) -->
+        {% if item.benefits %}
+        <div>
+          <div class="flex items-center gap-3 lg:gap-4 mb-6 lg:mb-8">
+            <div class="h-8 w-1 lg:h-10 lg:w-1.5 bg-gradient-to-b from-primary-500 to-secondary-500 rounded-full"></div>
+            <h2 class="text-2xl lg:text-3xl xl:text-4xl font-bold text-slate-900">{% trans "Benefits" %}</h2>
+          </div>
+          
+          <div class="prose max-w-none text-slate-700 leading-relaxed text-base lg:text-lg xl:text-xl">
+            {{ item.benefits|linebreaks }}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      
+      <!-- Related Listings (Optional) -->
+      {% comment %}
+      <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+        <h3 class="text-xl font-bold text-slate-900 mb-6">{% trans "Similar Opportunities" %}</h3>
+        <!-- Add related listings here -->
+      </div>
+      {% endcomment %}
+      
+    </section>
+
+    <!-- Sidebar Column -->
+    <aside class="lg:col-span-1 space-y-8 lg:space-y-10">
+      
+      <!-- Apply Card -->
+      <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-3xl lg:rounded-[2rem] p-6 lg:p-8 xl:p-10 shadow-lg">
+        <div class="text-center mb-6 lg:mb-8">
+          <div class="inline-flex h-16 w-16 lg:h-20 lg:w-20 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-primary-500 to-secondary-500 items-center justify-center mb-4 lg:mb-6">
+            <i class="fas fa-paper-plane text-white text-2xl lg:text-3xl"></i>
+          </div>
+          <h2 class="text-2xl lg:text-3xl font-bold text-slate-900">{% trans "Apply Now" %}</h2>
+          <p class="text-sm lg:text-base text-slate-600 mt-2 lg:mt-3">
+            {% trans "Use the official link to apply. Always verify details on the original website." %}
+          </p>
+        </div>
+
+        <div class="space-y-4 lg:space-y-6">
+          {% if item.apply_url %}
+          <a href="{{ item.apply_url }}" target="_blank" rel="noopener noreferrer"
+             class="block w-full py-4 lg:py-5 xl:py-6 px-6 rounded-2xl lg:rounded-3xl bg-gradient-to-r from-primary-600 to-secondary-600 
+                    text-white text-lg lg:text-xl xl:text-2xl font-bold hover:from-primary-700 hover:to-secondary-700 
+                    hover:shadow-xl transition-all duration-300 shadow-lg text-center 
+                    transform hover:-translate-y-1">
+            <i class="fas fa-external-link-alt mr-2 lg:mr-3"></i>
+            {% trans "Apply on Official Website" %}
+          </a>
+          {% else %}
+          <div class="bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 rounded-2xl lg:rounded-3xl p-5 lg:p-6">
+            <div class="text-center">
+              <i class="fas fa-exclamation-triangle text-amber-500 text-2xl lg:text-3xl mb-3 lg:mb-4"></i>
+              <p class="text-sm lg:text-base text-amber-800 font-medium">
+                {% trans "No apply link provided yet. Check back soon!" %}
+              </p>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Contact Button -->
+          {% if item.contact_email %}
+          <a href="mailto:{{ item.contact_email }}"
+             class="block w-full py-3 lg:py-4 px-6 rounded-2xl lg:rounded-3xl border-2 border-primary-200 
+                    bg-white text-primary-700 text-sm lg:text-base font-semibold hover:bg-primary-50 
+                    hover:border-primary-300 transition-all duration-200 text-center">
+            <i class="fas fa-envelope mr-2 lg:mr-3"></i>
+            {% trans "Contact Organization" %}
+          </a>
+          {% endif %}
+
+          <!-- Share Button -->
+          <button onclick="shareListing()"
+             class="w-full py-3 lg:py-4 px-6 rounded-2xl lg:rounded-3xl border-2 border-slate-200 
+                    bg-white text-slate-700 text-sm lg:text-base font-semibold hover:bg-slate-50 
+                    hover:border-slate-300 transition-all duration-200 flex items-center justify-center gap-2 lg:gap-3">
+            <i class="fas fa-share-alt text-base lg:text-lg"></i>
+            {% trans "Share Opportunity" %}
+          </button>
+        </div>
+
+        <!-- Deadline Countdown -->
+        {% if item.deadline %}
+        <div class="mt-8 lg:mt-10 pt-8 lg:pt-10 border-t border-slate-200">
+          <div class="text-center">
+            <div class="text-sm lg:text-base text-slate-600 mb-2 lg:mb-3">{% trans "Deadline in" %}</div>
+            <div id="countdown" class="flex items-center justify-center gap-2 lg:gap-3">
+              <!-- Countdown will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Quick Actions Card -->
+      <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-3xl lg:rounded-[2rem] p-6 lg:p-8 shadow-sm">
+        <h3 class="text-lg lg:text-xl xl:text-2xl font-bold text-slate-900 mb-4 lg:mb-6">{% trans "Quick Actions" %}</h3>
+        
+        <div class="space-y-3 lg:space-y-4">
+          <a href="{% url 'listings_list' %}"
+             class="flex items-center gap-3 lg:gap-4 px-4 lg:px-5 py-3 lg:py-4 rounded-xl lg:rounded-2xl border border-slate-200 
+                    bg-white text-slate-700 hover:bg-slate-50 hover:border-primary-300 
+                    hover:text-primary-700 transition-all duration-200">
+            <i class="fas fa-arrow-left text-slate-500 text-base lg:text-lg"></i>
+            <span class="font-medium text-base lg:text-lg">{% trans "Back to Listings" %}</span>
+          </a>
+          
+          <a href="{% url 'pages:contact' %}"
+             class="flex items-center gap-3 lg:gap-4 px-4 lg:px-5 py-3 lg:py-4 rounded-xl lg:rounded-2xl border border-slate-200 
+                    bg-white text-slate-700 hover:bg-slate-50 hover:border-primary-300 
+                    hover:text-primary-700 transition-all duration-200">
+            <i class="fas fa-question-circle text-slate-500 text-base lg:text-lg"></i>
+            <span class="font-medium text-base lg:text-lg">{% trans "Get Help" %}</span>
+          </a>
+          
+          {% if request.user.is_staff %}
+          <a href="{% url 'admin:listings_listing_change' item.id %}"
+             class="flex items-center gap-3 lg:gap-4 px-4 lg:px-5 py-3 lg:py-4 rounded-xl lg:rounded-2xl border border-slate-200 
+                    bg-white text-slate-700 hover:bg-slate-50 hover:border-primary-300 
+                    hover:text-primary-700 transition-all duration-200">
+            <i class="fas fa-edit text-slate-500 text-base lg:text-lg"></i>
+            <span class="font-medium text-base lg:text-lg">{% trans "Edit Listing" %}</span>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Stats Card -->
+      <div class="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-3xl lg:rounded-[2rem] p-6 lg:p-8 shadow-sm">
+        <h3 class="text-lg lg:text-xl xl:text-2xl font-bold text-slate-900 mb-6 lg:mb-8">{% trans "Listing Stats" %}</h3>
+        
+        <div class="space-y-4 lg:space-y-6">
+          <div class="flex items-center justify-between">
+            <span class="text-sm lg:text-base text-slate-600">{% trans "Views" %}</span>
+            <span class="font-bold text-slate-900 text-base lg:text-lg xl:text-xl">1,234</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm lg:text-base text-slate-600">{% trans "Saves" %}</span>
+            <span class="font-bold text-slate-900 text-base lg:text-lg xl:text-xl">89</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm lg:text-base text-slate-600">{% trans "Status" %}</span>
+            <span class="px-3 lg:px-4 py-1 lg:py-1.5 rounded-full text-xs lg:text-sm font-semibold 
+                      {% if item.is_active %}bg-emerald-100 text-emerald-800{% else %}bg-rose-100 text-rose-800{% endif %}">
+              {% if item.is_active %}{% trans "Active" %}{% else %}{% trans "Expired" %}{% endif %}
+            </span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<script>
+  // CSRF Token Function
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  // Save/Unsave Functionality
+  async function toggleSave(id) {
+    const csrftoken = getCookie("csrftoken");
+    const btn = document.getElementById("saveBtn");
+    
+    if (!btn) return;
+    
+    // Show loading state
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+
+    // Determine URL with language prefix
+    const m = window.location.pathname.match(/^\/(en|ps)\//);
+    const prefix = m ? '/' + m[1] : '';
+    const url = `${prefix}/listings/${id}/save/`;
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrftoken,
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      });
+
+      if (!res.ok) throw new Error('Request failed');
+      
+      const data = await res.json();
+      
+      // Update button state
+      if (data.saved) {
+        btn.innerHTML = '<i class="fas fa-star text-amber-500"></i><span>{% trans "Saved" %}</span>';
+        btn.classList.add('bg-amber-50', 'border-amber-200', 'text-amber-700');
+        btn.classList.remove('hover:bg-slate-50', 'hover:border-primary-300', 'hover:text-primary-700');
+        
+        // Show success toast
+        showToast('{% trans "Listing saved to your favorites!" %}', 'success');
+      } else {
+        btn.innerHTML = '<i class="far fa-star"></i><span>{% trans "Save" %}</span>';
+        btn.classList.remove('bg-amber-50', 'border-amber-200', 'text-amber-700');
+        btn.classList.add('hover:bg-slate-50', 'hover:border-primary-300', 'hover:text-primary-700');
+        
+        // Show info toast
+        showToast('{% trans "Removed from saved listings" %}', 'info');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showToast('{% trans "An error occurred. Please try again." %}', 'error');
+      btn.innerHTML = originalHTML;
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  // Countdown Timer
+  function updateCountdown() {
+    {% if item.deadline %}
+    const deadline = new Date("{{ item.deadline|date:'c' }}").getTime();
+    const now = new Date().getTime();
+    const timeLeft = deadline - now;
+
+    if (timeLeft <= 0) {
+      document.getElementById('countdown').innerHTML = `
+        <div class="px-4 lg:px-5 py-2 lg:py-3 rounded-xl lg:rounded-2xl bg-rose-100 text-rose-800 font-bold text-base lg:text-lg">
+          {% trans "Deadline Passed" %}
+        </div>
+      `;
+      return;
+    }
+
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+    document.getElementById('countdown').innerHTML = `
+      <div class="text-center px-2 lg:px-3">
+        <div class="text-2xl lg:text-3xl xl:text-4xl font-bold text-slate-900">${days}</div>
+        <div class="text-xs lg:text-sm text-slate-600">{% trans "Days" %}</div>
+      </div>
+      <div class="text-slate-400 text-lg lg:text-xl">:</div>
+      <div class="text-center px-2 lg:px-3">
+        <div class="text-2xl lg:text-3xl xl:text-4xl font-bold text-slate-900">${hours}</div>
+        <div class="text-xs lg:text-sm text-slate-600">{% trans "Hours" %}</div>
+      </div>
+      <div class="text-slate-400 text-lg lg:text-xl">:</div>
+      <div class="text-center px-2 lg:px-3">
+        <div class="text-2xl lg:text-3xl xl:text-4xl font-bold text-slate-900">${minutes}</div>
+        <div class="text-xs lg:text-sm text-slate-600">{% trans "Mins" %}</div>
+      </div>
+    `;
+    {% endif %}
+  }
+
+  // Share Functionality
+  function shareListing() {
+    const shareData = {
+      title: "{{ item.title }}",
+      text: "Check out this opportunity on SCHOLARIFY: {{ item.title }}",
+      url: window.location.href
+    };
+
+    if (navigator.share) {
+      navigator.share(shareData)
+        .then(() => showToast('{% trans "Shared successfully!" %}', 'success'))
+        .catch(err => console.log('Error sharing:', err));
+    } else {
+      // Fallback: Copy to clipboard
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => showToast('{% trans "Link copied to clipboard!" %}', 'success'))
+        .catch(err => {
+          console.error('Failed to copy:', err);
+          showToast('{% trans "Failed to copy link" %}', 'error');
+        });
+    }
+  }
+
+  // Toast Notification
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 px-6 py-3 rounded-xl shadow-lg z-50 transform transition-all duration-300 translate-x-full ${getToastClasses(type)}`;
+    toast.innerHTML = `
+      <div class="flex items-center gap-3">
+        <i class="fas ${getToastIcon(type)}"></i>
+        <span class="font-medium">${message}</span>
+      </div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+      toast.classList.remove('translate-x-full');
+    }, 10);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+      toast.classList.add('translate-x-full');
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  function getToastClasses(type) {
+    switch(type) {
+      case 'success': return 'bg-emerald-50 border border-emerald-200 text-emerald-800';
+      case 'error': return 'bg-rose-50 border border-rose-200 text-rose-800';
+      case 'warning': return 'bg-amber-50 border border-amber-200 text-amber-800';
+      default: return 'bg-primary-50 border border-primary-200 text-primary-800';
+    }
+  }
+
+  function getToastIcon(type) {
+    switch(type) {
+      case 'success': return 'fa-check-circle text-emerald-500';
+      case 'error': return 'fa-times-circle text-rose-500';
+      case 'warning': return 'fa-exclamation-triangle text-amber-500';
+      default: return 'fa-info-circle text-primary-500';
+    }
+  }
+
+  // Initialize
+  document.addEventListener("DOMContentLoaded", () => {
+    // Save button event listener
+    const saveBtn = document.getElementById("saveBtn");
+    if (saveBtn) {
+      const id = saveBtn.dataset.listingId;
+      saveBtn.addEventListener("click", () => toggleSave(id));
+    }
+
+    // Update countdown immediately and every minute
+    updateCountdown();
+    setInterval(updateCountdown, 60000);
+
+    // Add smooth scroll behavior for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Custom prose styles */
+  .prose {
+    color: #334155;
+  }
+  
+  .prose h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .prose h2 {
+      font-size: 1.75rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1.25rem;
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .prose h2 {
+      font-size: 2rem;
+    }
+  }
+  
+  .prose h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .prose h3 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+  }
+  
+  .prose p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+  }
+  
+  @media (min-width: 1024px) {
+    .prose p {
+      margin-bottom: 1.25rem;
+      line-height: 1.8;
+    }
+  }
+  
+  .prose ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .prose ul {
+      padding-left: 2rem;
+      margin-bottom: 1.25rem;
+    }
+  }
+  
+  .prose ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .prose ol {
+      padding-left: 2rem;
+      margin-bottom: 1.25rem;
+    }
+  }
+  
+  .prose li {
+    margin-bottom: 0.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .prose li {
+      margin-bottom: 0.75rem;
+    }
+  }
+  
+  .prose strong {
+    font-weight: 600;
+    color: #1e293b;
+  }
+  
+  .prose a {
+    color: #0ea5e9;
+    text-decoration: underline;
+    transition: color 0.2s;
+  }
+  
+  .prose a:hover {
+    color: #0284c7;
+  }
+  
+  /* Card hover effects */
+  .hover-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% load i18n %}
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ps' %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}NextStep{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    [dir="rtl"] body { direction: rtl; }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 font-black text-lg">
+        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-black text-white">N</span>
+        <span>NextStep</span>
+      </a>
+
+      <nav class="flex items-center gap-5">
+        <a href="/" class="text-sm text-slate-600 hover:text-slate-900">{% trans "Home" %}</a>
+        <a href="/listings/" class="text-sm text-slate-600 hover:text-slate-900">{% trans "Browse" %}</a>
+        <a href="/listings/?deadline=soon" class="text-sm text-slate-600 hover:text-slate-900">{% trans "Closing soon" %}</a>
+        <a href="/services/" class="text-sm text-slate-600 hover:text-slate-900">{% trans "Services" %}</a>
+        <a href="/gallery/" class="text-sm text-slate-600 hover:text-slate-900">{% trans "Gallery" %}</a>
+        <a href="/contact/" class="text-sm text-slate-600 hover:text-slate-900">{% trans "Contact" %}</a>
+
+        <div class="text-xs text-slate-500">
+  👁️ {{ total_site_visits }} {% trans "visits" %}
+</div>
+
+        
+        
+        {% if request.user.is_authenticated %}
+  <form method="post" action="{% url 'logout' %}" class="inline">
+    {% csrf_token %}
+    <button type="submit"
+      class="text-sm text-slate-600 hover:text-slate-900">
+      {% trans "Logout" %}
+    </button>
+  </form>
+{% else %}
+  <a href="{% url 'login' %}" class="text-sm text-slate-600 hover:text-slate-900">{% trans "Login" %}</a>
+  <a href="{% url 'signup' %}" class="text-sm text-slate-600 hover:text-slate-900">{% trans "Sign up" %}</a>
+{% endif %}
+
+       {% if request.user.is_authenticated and request.user.is_staff %}
+  <a href="/admin/">{% trans "Admin" %}</a>
+{% endif %}
+
+        <!-- Language dropdown -->
+        <form action="{% url 'set_language' %}" method="post" class="flex items-center">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <select name="language" onchange="this.form.submit()"
+                  class="border rounded-xl px-3 py-2 text-sm bg-white">
+            <option value="en" {% if LANGUAGE_CODE == "en" %}selected{% endif %}>English</option>
+            <option value="ps" {% if LANGUAGE_CODE == "ps" %}selected{% endif %}>پښتو</option>
+          </select>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <!-- PAGE CONTENT -->
+  {% block content %}{% endblock %}
+
+  <footer class="mt-16 border-t bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-8 text-sm text-slate-600">
+      © {{ now|date:"Y" }} NextStep • {% trans "All rights reserved" %}
+    </div>
+  </footer>
+
+</body>
+</html>
