@@ -1,11 +1,12 @@
-{% load i18n static %}
+﻿{% load i18n static %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% trans "Join Scholarify" %} • {% trans "Your Scholarship & Career Platform" %}</title>
+  <title>{% trans "Join Scholarify" %} â€¢ {% trans "Your Scholarship & Career Platform" %}</title>
+  <link rel="icon" type="image/png" href="{% static 'images/Scolarify.png' %}">
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -95,7 +96,7 @@
     }
 
     .custom-checkbox.checked::after {
-      content: "✓";
+      content: "âœ“";
       color: white;
       font-size: 12px;
       font-weight: bold;
@@ -149,7 +150,7 @@
           </div>
           <div>
             <h1 class="text-3xl font-black">Scholarify</h1>
-            <p class="text-white/80 text-sm">{% trans "Scholarships • Jobs • Courses" %}</p>
+            <p class="text-white/80 text-sm">{% trans "Scholarships â€¢ Jobs â€¢ Courses" %}</p>
           </div>
         </div>
 
@@ -617,3 +618,4 @@
 </body>
 
 </html>
+

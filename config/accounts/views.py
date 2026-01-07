@@ -3,15 +3,24 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.encoding import force_bytes
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.urls import reverse  # ADD THIS IMPORT!
+try:
+    from ratelimit.decorators import ratelimit
+except ImportError:
+    def ratelimit(*args, **kwargs):
+        def decorator(fn):
+            return fn
+        return decorator
 
 from .forms import SignupForm
 
 
+@ratelimit(key="ip", rate="5/m", block=True)
 def signup(request):
     """Enhanced signup view with email verification option"""
     
@@ -40,7 +49,13 @@ def signup(request):
                 )
                 
                 # Redirect to home
-                next_url = request.GET.get('next', '/')
+                next_url = request.GET.get("next") or "/"
+                if not url_has_allowed_host_and_scheme(
+                    next_url,
+                    allowed_hosts={request.get_host()},
+                    require_https=request.is_secure(),
+                ):
+                    next_url = "/"
                 return redirect(next_url)
                 
             except Exception as e:

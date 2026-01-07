@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.db.models import Q
+from django.views.decorators.http import require_POST
 
 from .models import Listing, SavedListing
 
@@ -58,6 +59,7 @@ def listing_detail(request, pk):
 
 
 @login_required
+@require_POST
 def toggle_save_listing(request, pk):
     listing = get_object_or_404(Listing, pk=pk)
 

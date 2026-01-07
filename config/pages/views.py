@@ -8,6 +8,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
+try:
+    from ratelimit.decorators import ratelimit
+except ImportError:
+    def ratelimit(*args, **kwargs):
+        def decorator(fn):
+            return fn
+        return decorator
 
 from .models import ContactMessage, GalleryImage, GalleryLike
 from listings.models import Listing, ListingView
@@ -66,6 +73,7 @@ def about(request):
     return render(request, "pages/about.html", context)
 
 
+@ratelimit(key="ip", rate="10/m", block=True)
 def contact(request):
     """Contact page view with form handling."""
     if request.method == "POST":

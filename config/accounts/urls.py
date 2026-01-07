@@ -1,8 +1,20 @@
 from django.urls import path, reverse_lazy
 from django.contrib.auth import views as auth_views
+from django.utils.decorators import method_decorator
+try:
+    from ratelimit.decorators import ratelimit
+except ImportError:
+    def ratelimit(*args, **kwargs):
+        def decorator(fn):
+            return fn
+        return decorator
 from .views import signup
 
 app_name = "accounts"
+
+@method_decorator(ratelimit(key="ip", rate="5/m", block=True), name="dispatch")
+class RateLimitedLoginView(auth_views.LoginView):
+    pass
 
 urlpatterns = [
     # --- Signup ---
@@ -11,7 +23,7 @@ urlpatterns = [
     # --- Login ---
     path(
         "login/",
-        auth_views.LoginView.as_view(
+        RateLimitedLoginView.as_view(
             template_name="accounts/login.html"
         ),
         name="login",
