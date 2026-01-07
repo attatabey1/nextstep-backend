@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+﻿from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.tokens import default_token_generator
@@ -45,7 +45,7 @@ def signup(request):
                 
                 messages.success(
                     request,
-                    f"🎉 Welcome to Scholarify, {user.first_name}! Your account is ready."
+                    f"ðŸŽ‰ Welcome to Scholarify, {user.first_name}! Your account is ready."
                 )
                 
                 # Redirect to home
@@ -89,17 +89,19 @@ def signup(request):
 def send_welcome_email(user):
     """Send welcome email to new user"""
     try:
-        subject = "Welcome to Scholarify! 🎓"
+        if not settings.EMAIL_HOST_USER or not settings.EMAIL_HOST_PASSWORD:
+            return
+        subject = "Welcome to Scholarify! ðŸŽ“"
         message = f"""
 Hello {user.first_name},
 
 Welcome to Scholarify! We're excited to have you join our community.
 
 With your account, you can:
-• Browse thousands of scholarships
-• Apply for opportunities worldwide
-• Save your favorite listings
-• Get personalized recommendations
+â€¢ Browse thousands of scholarships
+â€¢ Apply for opportunities worldwide
+â€¢ Save your favorite listings
+â€¢ Get personalized recommendations
 
 Start exploring: {getattr(settings, 'SITE_URL', 'http://localhost:8000')}
 
@@ -149,3 +151,4 @@ def send_verification_email(request, user):
         import logging
         logger = logging.getLogger(__name__)
         logger.error(f"Failed to send verification email: {e}")
+
